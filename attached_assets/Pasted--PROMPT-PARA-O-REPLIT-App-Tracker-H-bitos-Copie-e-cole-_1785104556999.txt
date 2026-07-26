@@ -1,0 +1,184 @@
+# PROMPT PARA O REPLIT — App "Tracker Hábitos"
+
+> Copie e cole o texto abaixo inteiro no chat do Replit Agent (ou Replit AI) para iniciar o projeto.
+
+---
+
+## 🎯 VISÃO GERAL DO PROJETO
+
+Quero construir do zero um aplicativo web chamado **Tracker Hábitos**.
+
+Não é para ser "mais um app de produtividade genérico". O objetivo é criar uma plataforma **modular e pessoal**, onde o usuário controla tarefas, eventos, estudos, treinos e hábitos em um único lugar, mas com liberdade para **ativar, desativar e adicionar módulos** conforme sua rotina evolui. O app deve nascer pequeno (MVP) e crescer em etapas, como se fosse um "sistema operacional pessoal de produtividade".
+
+O diferencial não pode ser só visual: a experiência precisa reforçar consistência e hábito (algo no estilo "streaks", evolução visual, conquistas), sem parecer infantil ou cansativo no médio prazo.
+
+---
+
+## 🧩 CONCEITO CENTRAL: SISTEMA DE MÓDULOS
+
+O app deve ser construído em torno de uma **arquitetura de módulos plugáveis**, não em telas fixas. Cada módulo é uma "aba"/funcionalidade independente que o usuário pode ativar, reorganizar ou ocultar em um painel de configurações ("Meus Módulos").
+
+Módulos do MVP (v1):
+
+1. **Módulo Tarefas** — gestão de tarefas do dia a dia (to-do list avançada)
+2. **Módulo Eventos** — agenda/calendário de compromissos
+3. **Módulo Estudos** — controle de matérias, conteúdos e evolução de aprendizado
+4. **Módulo Treinos** — controle de treinos físicos (academia, cardio, etc.)
+5. **Módulo Hábitos** — hábitos recorrentes com streaks (o "coração" do app)
+
+Módulos futuros que o sistema deve estar preparado para receber sem refatoração grande: Finanças, Leitura, Sono, Água, Projetos, Metas de longo prazo.
+
+Cada módulo deve seguir o mesmo "contrato" de dados e componentes (interface comum), para que adicionar um módulo novo seja um processo repetível, não uma reescrita.
+
+---
+
+## 🗂️ DETALHAMENTO DOS MÓDULOS
+
+### 1. Módulo Tarefas
+- CRUD completo de tarefas (título, descrição, prioridade, prazo, tags, subtarefas)
+- Categorias/projetos personalizados
+- Visualização em lista e em Kanban (A Fazer / Fazendo / Concluído)
+- Tarefas recorrentes (diária, semanal, etc.)
+- Marcar como concluída com animação de recompensa
+
+### 2. Módulo Eventos
+- Calendário mensal/semanal/diário
+- Criar evento com data, hora, local, descrição, lembrete
+- Integração visual com o módulo Tarefas (mostrar tarefas com prazo no mesmo calendário)
+- Cores por categoria de evento
+
+### 3. Módulo Estudos
+- Cadastro de matérias/disciplinas ou cursos
+- Dentro de cada matéria: tópicos/conteúdos com status (não iniciado, estudando, revisão, dominado)
+- Registro de sessões de estudo (data, duração, tópico, anotações)
+- **Gráfico de evolução**: horas estudadas por semana/mês, progresso por matéria, "mapa de calor" de constância (estilo GitHub contributions)
+- Sistema de revisão espaçada (opcional na v2): sugerir o que revisar com base no tempo desde o último estudo
+
+### 4. Módulo Treinos
+- Cadastro de treinos (nome, grupo muscular, dia da semana)
+- Registro de exercícios: séries, repetições, carga, tempo de descanso
+- Histórico de evolução de carga por exercício (gráfico de progressão)
+- Marcar treino do dia como concluído
+- Timer de descanso entre séries
+
+### 5. Módulo Hábitos
+- Criar hábitos com frequência customizável (diário, dias específicos, X vezes por semana)
+- Check-in diário com animação de "streak"
+- Visualização estilo heatmap de constância
+- Sistema de conquistas/badges (7 dias, 30 dias, 100 dias, etc.)
+- Notificação/lembrete de horário sugerido
+
+---
+
+## 🎨 DIRETRIZES DE DESIGN (MUITO IMPORTANTE)
+
+O visual é parte central da proposta — o app precisa ser bonito, vivo e viciante de usar (no bom sentido), mas sem poluição visual.
+
+- **Estilo:** moderno, "dashboard pessoal", modo escuro como padrão (com opção de modo claro), cantos arredondados, cards com profundidade sutil (glassmorphism leve ou neumorphism suave), boa hierarquia tipográfica.
+- **Cor:** uma cor de destaque vibrante por módulo (ex: tarefas = azul, estudos = roxo, treinos = laranja, hábitos = verde), mantendo uma base neutra consistente.
+- **Microanimações:** transições suaves entre telas, animação de conclusão de tarefa/hábito (confete leve, check animado, progresso preenchendo), skeleton loading ao invés de spinners genéricos.
+- **Gamificação sutil:** streaks, barras de progresso, nível/pontuação geral de constância, mensagens motivacionais contextuais — sem exagerar a ponto de parecer jogo infantil.
+- **Dashboard inicial (Home):** visão-resumo do dia — tarefas de hoje, eventos de hoje, hábitos pendentes, próximo treino, progresso de estudo da semana — tudo em cards que levam ao módulo completo ao clicar.
+- **Intuitividade:** navegação lateral (desktop) ou bottom tab (mobile) fixa para os módulos ativos, com botão central de "adicionar" contextual (adiciona o item do módulo em que o usuário está).
+- Use bibliotecas de animação leves e modernas (ex: Framer Motion) e ícones consistentes (ex: Lucide).
+
+---
+
+## 🛠️ STACK TÉCNICA
+
+- **Frontend:** React + TypeScript + Tailwind CSS + Framer Motion + Recharts (para os gráficos de evolução)
+- **Backend/Banco de dados:** Supabase (Auth, Postgres, Realtime, Storage)
+- **Autenticação:** Supabase Auth (email/senha, e login com Google se possível)
+- **Hospedagem:** o próprio ambiente do Replit
+
+### Estrutura de banco de dados no Supabase (sugestão inicial)
+
+```
+users (gerenciado pelo Supabase Auth)
+
+modules
+  id, user_id, key, name, icon, color, is_active, sort_order
+
+tasks
+  id, user_id, title, description, status, priority, due_date, project, is_recurring, recurrence_rule, created_at
+
+events
+  id, user_id, title, description, start_at, end_at, location, category, color
+
+study_subjects
+  id, user_id, name, color
+
+study_topics
+  id, subject_id, title, status (nao_iniciado/estudando/revisao/dominado)
+
+study_sessions
+  id, user_id, topic_id, date, duration_minutes, notes
+
+workouts
+  id, user_id, name, weekday
+
+workout_exercises
+  id, workout_id, name, target_sets, target_reps
+
+workout_logs
+  id, user_id, exercise_id, date, sets, reps, weight
+
+habits
+  id, user_id, name, frequency_type, frequency_config, color, created_at
+
+habit_checkins
+  id, habit_id, date, completed
+
+achievements
+  id, user_id, type, unlocked_at
+```
+
+Cada tabela deve ter **Row Level Security (RLS)** ativado no Supabase, garantindo que cada usuário só acesse os próprios dados.
+
+---
+
+## 🚧 ROADMAP DE DESENVOLVIMENTO (por etapas)
+
+Quero construir isso **em etapas incrementais**, não tudo de uma vez. Siga esta ordem:
+
+**Etapa 1 — Fundação**
+- Configurar projeto (React + Tailwind + Supabase)
+- Autenticação (cadastro/login)
+- Estrutura de navegação com sistema de módulos (mesmo que só com "Tarefas" ativo no início)
+- Tela de Dashboard vazia, com layout pronto para receber cards
+
+**Etapa 2 — Módulo Tarefas completo**
+- CRUD de tarefas + Kanban + recorrência
+- Conectar ao Dashboard
+
+**Etapa 3 — Módulo Eventos**
+- Calendário + CRUD de eventos
+- Integrar com Dashboard e com Tarefas (prazos aparecendo no calendário)
+
+**Etapa 4 — Módulo Hábitos**
+- CRUD de hábitos + check-in diário + streaks + heatmap
+
+**Etapa 5 — Módulo Estudos**
+- CRUD de matérias/tópicos + sessões de estudo + gráficos de evolução
+
+**Etapa 6 — Módulo Treinos**
+- CRUD de treinos/exercícios + logs + gráfico de progressão de carga
+
+**Etapa 7 — Painel "Meus Módulos"**
+- Tela para ativar/desativar/reordenar módulos
+- Preparar arquitetura para módulos futuros (finanças, leitura, etc.)
+
+**Etapa 8 — Polimento**
+- Animações finais, modo claro/escuro, responsividade mobile, sistema de conquistas geral
+
+Comece pela **Etapa 1** e me entregue funcionando antes de avançar para a próxima. Ao final de cada etapa, mostre o que foi feito e aguarde confirmação para seguir.
+
+---
+
+## ✅ REGRAS GERAIS PARA O AGENTE
+
+- Priorize código limpo, componentizado e reutilizável (pensando que novos módulos serão adicionados no futuro).
+- Toda tabela do Supabase deve ter RLS.
+- O app deve ser responsivo (mobile-first, já que será usado no dia a dia).
+- Não usar dados fake/mock permanentes — conectar ao Supabase desde a Etapa 1.
+- Comente o código nas partes-chave da arquitetura de módulos, pois isso será a base de tudo.
