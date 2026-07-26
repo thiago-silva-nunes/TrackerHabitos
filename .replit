@@ -36,3 +36,9 @@ externalPort = 80
 [[ports]]
 localPort = 5001
 externalPort = 3001
+
+[userenv]
+
+[userenv.shared]
+VITE_SUPABASE_ANON_KEY = "sb_publishable_BYZtuvIL3kEgkQbwLjFEfw_8S3JI-o8"
+VITE_SUPABASE_URL = "https://srfftbeecbvauujswdiq.supabase.co"
