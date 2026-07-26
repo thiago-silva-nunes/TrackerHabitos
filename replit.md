@@ -52,7 +52,9 @@ src/
 
 ## Banco de dados Supabase
 
-Execute o SQL abaixo no SQL Editor do seu projeto Supabase para criar as tabelas necessárias para a Etapa 1:
+### Etapa 1 — Fundação (módulos do usuário)
+
+Execute no SQL Editor do Supabase:
 
 ```sql
 -- Tabela de módulos do usuário
@@ -68,14 +70,118 @@ create table public.modules (
   unique(user_id, key)
 );
 
--- Row Level Security
 alter table public.modules enable row level security;
 
 create policy "Users can manage their own modules"
-  on public.modules
-  for all
+  on public.modules for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+```
+
+### Etapa 5 — Módulo de Estudos
+
+Execute no SQL Editor do Supabase:
+
+```sql
+-- Projetos de estudo
+create table public.study_projects (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  description text,
+  emoji text not null default '📚',
+  created_at timestamptz default now()
+);
+alter table public.study_projects enable row level security;
+create policy "Users manage own study_projects" on public.study_projects for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Trilhas de aprendizagem dentro de um projeto
+create table public.study_tracks (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid references public.study_projects(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  sort_order int not null default 0,
+  created_at timestamptz default now()
+);
+alter table public.study_tracks enable row level security;
+create policy "Users manage own study_tracks" on public.study_tracks for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Tópicos (subtópicos) dentro de uma trilha
+create table public.study_topics (
+  id uuid primary key default gen_random_uuid(),
+  track_id uuid references public.study_tracks(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  status text not null default 'pending', -- pending | in_progress | done
+  sort_order int not null default 0,
+  created_at timestamptz default now()
+);
+alter table public.study_topics enable row level security;
+create policy "Users manage own study_topics" on public.study_topics for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Recursos de cada tópico (vídeos YouTube + anotações)
+create table public.topic_resources (
+  id uuid primary key default gen_random_uuid(),
+  topic_id uuid references public.study_topics(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  type text not null,       -- 'youtube' | 'note'
+  title text,
+  url text,                 -- para type = 'youtube'
+  content text,             -- para type = 'note'
+  sort_order int not null default 0,
+  created_at timestamptz default now()
+);
+alter table public.topic_resources enable row level security;
+create policy "Users manage own topic_resources" on public.topic_resources for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Testes/quizzes de um projeto
+create table public.study_tests (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid references public.study_projects(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  description text,
+  created_at timestamptz default now()
+);
+alter table public.study_tests enable row level security;
+create policy "Users manage own study_tests" on public.study_tests for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Questões de um teste (múltipla escolha)
+create table public.test_questions (
+  id uuid primary key default gen_random_uuid(),
+  test_id uuid references public.study_tests(id) on delete cascade not null,
+  question text not null,
+  options jsonb not null default '[]',   -- array de strings
+  correct_index int not null default 0,
+  explanation text,
+  sort_order int not null default 0
+);
+alter table public.test_questions enable row level security;
+create policy "Users read own test_questions" on public.test_questions for all
+  using (exists (
+    select 1 from public.study_tests st
+    where st.id = test_questions.test_id and st.user_id = auth.uid()
+  ));
+
+-- Tentativas de teste
+create table public.test_attempts (
+  id uuid primary key default gen_random_uuid(),
+  test_id uuid references public.study_tests(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  score int not null,
+  total int not null,
+  answers jsonb not null default '[]',  -- array de índices escolhidos
+  completed_at timestamptz default now()
+);
+alter table public.test_attempts enable row level security;
+create policy "Users manage own test_attempts" on public.test_attempts for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
 ```
 
 ## Arquitetura de módulos

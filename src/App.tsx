@@ -9,6 +9,10 @@ import { SignupPage } from "@/pages/auth/SignupPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { ModulesPage } from "@/pages/ModulesPage";
 import { ComingSoonPage } from "@/pages/ComingSoonPage";
+import { StudiesPage } from "@/pages/estudos/StudiesPage";
+import { StudyProjectPage } from "@/pages/estudos/StudyProjectPage";
+import { StudyTopicPage } from "@/pages/estudos/StudyTopicPage";
+import { StudyTestPage } from "@/pages/estudos/StudyTestPage";
 
 /**
  * ProtectedRoute — redirects unauthenticated users to /login.
@@ -117,7 +121,31 @@ export default function App() {
             path="/estudos"
             element={
               <ProtectedRoute>
-                <ComingSoonPage moduleName="Módulo Estudos" />
+                <StudiesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/estudos/:projectId"
+            element={
+              <ProtectedRoute>
+                <StudyProjectPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/estudos/:projectId/topico/:topicId"
+            element={
+              <ProtectedRoute>
+                <StudyTopicPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/estudos/:projectId/testes/:testId"
+            element={
+              <ProtectedRoute>
+                <StudyTestPage />
               </ProtectedRoute>
             }
           />
