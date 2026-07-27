@@ -14,6 +14,7 @@ import { ComingSoonPage } from "@/pages/ComingSoonPage";
 import { StudiesPage } from "@/pages/estudos/StudiesPage";
 import { StudyProjectPage } from "@/pages/estudos/StudyProjectPage";
 import { StudyTopicPage } from "@/pages/estudos/StudyTopicPage";
+import { HabitsPage } from "@/pages/HabitsPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
@@ -71,7 +72,7 @@ export default function App() {
             <Route path="/estudos/:projectId" element={<ProtectedRoute><StudyProjectPage /></ProtectedRoute>} />
             <Route path="/estudos/:projectId/topico/:topicId" element={<ProtectedRoute><StudyTopicPage /></ProtectedRoute>} />
             <Route path="/treinos" element={<ProtectedRoute><ComingSoonPage moduleName="Módulo Treinos" /></ProtectedRoute>} />
-            <Route path="/habitos" element={<ProtectedRoute><ComingSoonPage moduleName="Módulo Hábitos" /></ProtectedRoute>} />
+            <Route path="/habitos" element={<ProtectedRoute><HabitsPage /></ProtectedRoute>} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

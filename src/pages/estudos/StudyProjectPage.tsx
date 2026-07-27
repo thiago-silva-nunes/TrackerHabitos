@@ -204,7 +204,7 @@ export function StudyProjectPage() {
 
       {/* ── Trilhas Tab ── */}
       {tab === "trilhas" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full space-y-4">
           {tracks.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-foreground/65 text-sm mb-4">Nenhuma trilha ainda. Crie a primeira!</p>
@@ -328,7 +328,7 @@ export function StudyProjectPage() {
                 );
               })}
 
-               <Button variant="secondary" onClick={() => setShowTrackModal(true)} className="w-full lg:col-span-2">
+                <Button variant="secondary" onClick={() => setShowTrackModal(true)} className="w-full">
                 <Plus className="w-4 h-4" /> Nova trilha
               </Button>
             </>

@@ -78,6 +78,41 @@ create policy "Users can manage their own modules"
   with check (auth.uid() = user_id);
 ```
 
+### Etapa 4 — Módulo de Hábitos
+
+Execute no SQL Editor do Supabase:
+
+```sql
+create table public.habits (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  name text not null,
+  description text,
+  frequency_type text not null default 'daily',
+  frequency_config jsonb not null default '{}'::jsonb,
+  color text not null default '#22c55e',
+  created_at timestamptz not null default now(),
+  constraint habits_frequency_type_check check (
+    frequency_type in ('daily', 'specific_days', 'weekly_target')
+  )
+);
+alter table public.habits enable row level security;
+create policy "Users manage own habits" on public.habits for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create table public.habit_checkins (
+  id uuid primary key default gen_random_uuid(),
+  habit_id uuid references public.habits(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  date date not null,
+  completed boolean not null default true,
+  unique(habit_id, date)
+);
+alter table public.habit_checkins enable row level security;
+create policy "Users manage own habit_checkins" on public.habit_checkins for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+```
+
 ### Etapa 5 — Módulo de Estudos
 
 Execute no SQL Editor do Supabase:
@@ -202,7 +237,7 @@ O `ModuleContext` e a tabela `modules` não precisam de alterações.
 | 1 — Fundação | ✅ Concluída | Auth, navegação, sistema de módulos, dashboard |
 | 2 — Tarefas | 🔜 Próxima | CRUD + Kanban + recorrência |
 | 3 — Eventos | ⏳ | Calendário + CRUD |
-| 4 — Hábitos | ⏳ | Streaks + heatmap + conquistas |
+| 4 — Hábitos | ✅ Concluída | Criação, edição, frequência, check-ins e sequências |
 | 5 — Estudos | ⏳ | Matérias + sessões + gráficos |
 | 6 — Treinos | ⏳ | Treinos + logs + progressão |
 | 7 — Painel Módulos | ⏳ | Ativar/reordenar módulos |
