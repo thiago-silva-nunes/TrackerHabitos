@@ -53,7 +53,7 @@ export function ModulesPage() {
         className="mb-8"
       >
         <h1 className="text-2xl font-bold text-foreground">Meus Módulos</h1>
-        <p className="text-sm text-foreground/40 mt-1">
+        <p className="text-sm text-foreground/65 mt-1">
           Ative ou desative módulos conforme sua rotina. Novas funcionalidades chegam como novos módulos.
         </p>
       </motion.div>
@@ -85,17 +85,17 @@ export function ModulesPage() {
                 <Icon
                   className={cn(
                     "w-5 h-5",
-                    mod.is_active ? COLOR_ICON[key] : "text-foreground/30"
+                    mod.is_active ? COLOR_ICON[key] : "text-foreground/60"
                   )}
                 />
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <p className={cn("font-semibold text-sm", mod.is_active ? "text-foreground" : "text-foreground/40")}>
+                <p className={cn("font-semibold text-sm", mod.is_active ? "text-foreground" : "text-foreground/65")}>
                   {mod.name}
                 </p>
-                <p className="text-xs text-foreground/30">{MODULE_DESCRIPTIONS[key]}</p>
+                <p className="text-xs text-foreground/65">{MODULE_DESCRIPTIONS[key]}</p>
               </div>
 
               {/* Toggle */}
@@ -120,7 +120,7 @@ export function ModulesPage() {
         })}
       </div>
 
-      <p className="text-xs text-foreground/20 text-center mt-8">
+      <p className="text-xs text-foreground/60 text-center mt-8">
         Mais módulos chegando em breve: Finanças, Leitura, Sono, Água, Metas…
       </p>
     </div>

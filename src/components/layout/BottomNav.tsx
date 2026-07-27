@@ -24,7 +24,7 @@ export function BottomNav() {
           to="/"
           className={({ isActive }) =>
             cn("flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all",
-              isActive ? "text-foreground" : "text-foreground/35"
+               isActive ? "text-foreground" : "text-foreground/60"
             )
           }
         >
@@ -40,7 +40,7 @@ export function BottomNav() {
               to={mod.path}
               className={({ isActive }) =>
                 cn("flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all",
-                  isActive ? COLOR_ACTIVE[mod.key as ModuleKey] : "text-foreground/35"
+                   isActive ? COLOR_ACTIVE[mod.key as ModuleKey] : "text-foreground/60"
                 )
               }
             >
@@ -53,7 +53,7 @@ export function BottomNav() {
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
-          className="flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-foreground/35 hover:text-foreground transition-all"
+          className="flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-foreground/60 hover:text-foreground transition-all"
           aria-label={theme === "dark" ? "Modo claro" : "Modo escuro"}
         >
           {theme === "dark"

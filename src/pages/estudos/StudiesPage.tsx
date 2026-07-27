@@ -122,7 +122,7 @@ export function StudiesPage() {
             <BookOpen className="w-5 h-5 text-studies" />
             <h1 className="text-xl font-bold text-foreground">Estudos</h1>
           </div>
-          <p className="text-sm text-foreground/40">Seus projetos de aprendizagem</p>
+          <p className="text-sm text-foreground/65">Seus projetos de aprendizagem</p>
         </div>
         <Button onClick={() => setShowModal(true)} size="sm">
           <Plus className="w-4 h-4" /> Novo projeto
@@ -146,7 +146,7 @@ export function StudiesPage() {
             <BookOpen className="w-8 h-8 text-studies" />
           </div>
           <p className="text-foreground/60 font-medium mb-1">Nenhum projeto ainda</p>
-          <p className="text-foreground/30 text-sm mb-6">Crie seu primeiro projeto de estudos</p>
+          <p className="text-foreground/60 text-sm mb-6">Crie seu primeiro projeto de estudos</p>
           <Button onClick={() => setShowModal(true)}>
             <Plus className="w-4 h-4" /> Criar projeto
           </Button>
@@ -164,8 +164,16 @@ export function StudiesPage() {
               : 0;
             return (
               <motion.div key={project.id} variants={item}>
-                <button
+                <div
+                  role="button"
+                  tabIndex={0}
                   onClick={() => navigate(`/estudos/${project.id}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      navigate(`/estudos/${project.id}`);
+                    }
+                  }}
                   className="w-full text-left bg-surface-1 border border-studies/20 hover:border-studies/40 rounded-2xl p-5 transition-all group relative"
                 >
                   <div className="flex items-start justify-between gap-3 mb-4">
@@ -174,7 +182,7 @@ export function StudiesPage() {
                       <div>
                         <p className="font-semibold text-foreground text-sm leading-snug">{project.title}</p>
                         {project.description && (
-                          <p className="text-xs text-foreground/40 mt-0.5 line-clamp-1">{project.description}</p>
+                          <p className="text-xs text-foreground/65 mt-0.5 line-clamp-1">{project.description}</p>
                         )}
                       </div>
                     </div>
@@ -182,7 +190,7 @@ export function StudiesPage() {
                       <button
                         onClick={(e) => handleDelete(project.id, e)}
                         disabled={deletingId === project.id}
-                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -197,11 +205,11 @@ export function StudiesPage() {
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-xs text-foreground/30">
+                    <p className="text-xs text-foreground/60">
                       {project.done_topics}/{project.total_topics} tópicos concluídos · {pct}%
                     </p>
                   </div>
-                </button>
+                </div>
               </motion.div>
             );
           })}
@@ -234,7 +242,7 @@ export function StudiesPage() {
 
               {/* Emoji picker */}
               <div className="mb-4">
-                <p className="text-xs text-foreground/40 mb-2 font-medium">Ícone</p>
+                <p className="text-xs text-foreground/65 mb-2 font-medium">Ícone</p>
                 <div className="flex flex-wrap gap-2">
                   {EMOJIS.map((e) => (
                     <button
@@ -252,7 +260,7 @@ export function StudiesPage() {
 
               <div className="space-y-3 mb-5">
                 <div>
-                  <label className="text-xs text-foreground/40 font-medium block mb-1.5">Título *</label>
+                  <label className="text-xs text-foreground/65 font-medium block mb-1.5">Título *</label>
                   <input
                     autoFocus
                     value={form.title}
@@ -263,7 +271,7 @@ export function StudiesPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-foreground/40 font-medium block mb-1.5">Descrição (opcional)</label>
+                  <label className="text-xs text-foreground/65 font-medium block mb-1.5">Descrição (opcional)</label>
                   <textarea
                     value={form.description}
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}

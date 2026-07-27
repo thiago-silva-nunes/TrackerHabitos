@@ -1,0 +1,1 @@
+- [Imported Vite setup](imported-vite-setup.md) — install manifest dependencies when an imported project starts without `node_modules`.

@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { Moon, Sun, LayoutDashboard, CheckSquare, Calendar, BookOpen, Dumbbell, Flame, Settings, LogOut } from "lucide-react";
+import { useState } from "react";
+import { Moon, Sun, LayoutDashboard, CheckSquare, Calendar, BookOpen, Dumbbell, Flame, Settings, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModules } from "@/contexts/ModuleContext";
@@ -25,30 +26,44 @@ export function Sidebar() {
   const { signOut, user } = useAuth();
   const { activeModules } = useModules();
   const { theme, toggleTheme } = useTheme();
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem("sidebar-collapsed") === "true");
+
+  function toggleSidebar() {
+    setCollapsed((value) => {
+      const next = !value;
+      localStorage.setItem("sidebar-collapsed", String(next));
+      return next;
+    });
+  }
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-full bg-surface-1 border-r border-foreground/6 py-6 px-3 gap-1 flex-shrink-0">
+    <aside className={cn(
+      "hidden lg:flex flex-col h-full bg-surface-1 border-r border-foreground/6 py-6 px-3 gap-1 flex-shrink-0 transition-[width] duration-200",
+      collapsed ? "w-[76px]" : "w-64",
+    )}>
       {/* Brand */}
-      <div className="flex items-center justify-between px-3 mb-6">
+      <div className={cn("flex items-center px-3 mb-6", collapsed ? "justify-center" : "justify-between")}>
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-habits flex items-center justify-center shadow-lg shadow-habits/30 flex-shrink-0">
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
               <path d="M5 12.5l4.5 4.5 9.5-9.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <div>
+          <div className={cn("overflow-hidden transition-all", collapsed ? "w-0 opacity-0" : "w-auto opacity-100")}>
             <p className="font-semibold text-sm text-foreground leading-tight">Tracker</p>
-            <p className="text-xs text-foreground/40">Hábitos</p>
+            <p className="text-xs text-foreground/65">Hábitos</p>
           </div>
         </div>
-        {/* Theme toggle */}
-        <button
-          onClick={toggleTheme}
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/40 hover:text-foreground hover:bg-foreground/6 transition-all"
-          title={theme === "dark" ? "Modo claro" : "Modo escuro"}
-        >
-          {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
+        {!collapsed && (
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/60 hover:text-foreground hover:bg-foreground/6 transition-all"
+            title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+            aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+          >
+            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+        )}
       </div>
 
       {/* Dashboard link */}
@@ -56,15 +71,18 @@ export function Sidebar() {
         to="/"
         className={({ isActive }) =>
           cn("flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border",
-            isActive ? "text-foreground bg-foreground/8 border-foreground/10" : "text-foreground/50 border-transparent hover:text-foreground/80 hover:bg-foreground/4"
+            collapsed && "justify-center px-0",
+            isActive ? "text-foreground bg-foreground/8 border-foreground/10" : "text-foreground/65 border-transparent hover:text-foreground hover:bg-foreground/4"
           )
         }
+        title={collapsed ? "Dashboard" : undefined}
       >
-        <LayoutDashboard className="w-4 h-4 flex-shrink-0" /> Dashboard
+        <LayoutDashboard className="w-4 h-4 flex-shrink-0" />
+        {!collapsed && "Dashboard"}
       </NavLink>
 
       <div className="my-2 border-t border-foreground/6" />
-      <p className="px-3 text-[11px] font-semibold uppercase tracking-widest text-foreground/25 mb-1">Módulos</p>
+      {!collapsed && <p className="px-3 text-[11px] font-semibold uppercase tracking-widest text-foreground/60 mb-1">Módulos</p>}
 
       {activeModules.map((mod) => {
         const Icon = ICON_MAP[mod.icon] ?? Flame;
@@ -74,14 +92,16 @@ export function Sidebar() {
             to={mod.path}
             className={({ isActive }) =>
               cn("flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border",
-                isActive ? COLOR_ACTIVE[mod.key as ModuleKey] : "text-foreground/50 border-transparent hover:text-foreground/80 hover:bg-foreground/4"
+                collapsed && "justify-center px-0",
+                isActive ? COLOR_ACTIVE[mod.key as ModuleKey] : "text-foreground/65 border-transparent hover:text-foreground hover:bg-foreground/4"
               )
             }
+            title={collapsed ? mod.name : undefined}
           >
             {({ isActive }) => (
               <>
                 <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? COLOR_ICON_ACTIVE[mod.key as ModuleKey] : "")} />
-                {mod.name}
+                {!collapsed && mod.name}
               </>
             )}
           </NavLink>
@@ -91,29 +111,49 @@ export function Sidebar() {
       <div className="flex-1" />
 
       <div className="border-t border-foreground/6 pt-3 space-y-0.5">
+        <button
+          onClick={toggleSidebar}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground/65 hover:text-foreground hover:bg-foreground/4 transition-all",
+            collapsed && "justify-center px-0",
+          )}
+          title={collapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
+          aria-label={collapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
+        >
+          {collapsed ? <PanelLeftOpen className="w-4 h-4 flex-shrink-0" /> : <PanelLeftClose className="w-4 h-4 flex-shrink-0" />}
+          {!collapsed && "Recolher menu"}
+        </button>
         <NavLink
           to="/modulos"
           className={({ isActive }) =>
             cn("flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border border-transparent",
-              isActive ? "text-foreground bg-foreground/8" : "text-foreground/50 hover:text-foreground/80 hover:bg-foreground/4"
+              collapsed && "justify-center px-0",
+              isActive ? "text-foreground bg-foreground/8" : "text-foreground/65 hover:text-foreground hover:bg-foreground/4"
             )
           }
+          title={collapsed ? "Meus Módulos" : undefined}
         >
-          <Settings className="w-4 h-4 flex-shrink-0" /> Meus Módulos
+          <Settings className="w-4 h-4 flex-shrink-0" />
+          {!collapsed && "Meus Módulos"}
         </NavLink>
 
         <button
           onClick={signOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground/40 hover:text-red-400 hover:bg-red-500/8 transition-all"
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground/65 hover:text-red-400 hover:bg-red-500/8 transition-all",
+            collapsed && "justify-center px-0",
+          )}
+          title={collapsed ? "Sair" : undefined}
         >
-          <LogOut className="w-4 h-4 flex-shrink-0" /> Sair
+          <LogOut className="w-4 h-4 flex-shrink-0" />
+          {!collapsed && "Sair"}
         </button>
 
-        <div className="flex items-center gap-3 px-3 py-3 mt-2 rounded-xl bg-foreground/3">
+        <div className={cn("flex items-center gap-3 px-3 py-3 mt-2 rounded-xl bg-foreground/3", collapsed && "justify-center px-0")} title={collapsed ? user?.email ?? "Usuário" : undefined}>
           <div className="w-8 h-8 rounded-full bg-habits/30 flex items-center justify-center text-habits text-sm font-semibold flex-shrink-0">
             {user?.email?.charAt(0).toUpperCase() ?? "U"}
           </div>
-          <p className="text-xs text-foreground/40 truncate">{user?.email}</p>
+          {!collapsed && <p className="text-xs text-foreground/65 truncate">{user?.email}</p>}
         </div>
       </div>
     </aside>

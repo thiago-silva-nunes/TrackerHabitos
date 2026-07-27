@@ -14,7 +14,7 @@ import { StudyProject, StudyTrackWithTopics, StudyTopic, TopicStatus } from "@/t
 import { StudyTerminal } from "./StudyTerminal";
 
 const STATUS_CONFIG: Record<TopicStatus, { icon: React.ElementType; label: string; color: string }> = {
-  pending:     { icon: Circle,       label: "Pendente",     color: "text-foreground/30" },
+  pending:     { icon: Circle,       label: "Pendente",     color: "text-foreground/60" },
   in_progress: { icon: Clock,        label: "Em progresso", color: "text-studies"       },
   done:        { icon: CheckCircle2, label: "Concluído",    color: "text-green-400"     },
 };
@@ -161,20 +161,20 @@ export function StudyProjectPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
         <button onClick={() => navigate("/estudos")}
-          className="flex items-center gap-1.5 text-sm text-foreground/40 hover:text-foreground/70 transition-colors mb-4">
+          className="flex items-center gap-1.5 text-sm text-foreground/65 hover:text-foreground transition-colors mb-4">
           <ArrowLeft className="w-4 h-4" /> Estudos
         </button>
         <div className="flex items-center gap-3">
           <span className="text-3xl">{project.emoji}</span>
           <div>
             <h1 className="text-xl font-bold text-foreground">{project.title}</h1>
-            {project.description && <p className="text-sm text-foreground/40 mt-0.5">{project.description}</p>}
+            {project.description && <p className="text-sm text-foreground/65 mt-0.5">{project.description}</p>}
           </div>
         </div>
 
         {allTopics.length > 0 && (
           <div className="mt-4 space-y-1">
-            <div className="flex items-center justify-between text-xs text-foreground/30">
+            <div className="flex items-center justify-between text-xs text-foreground/65">
               <span>Progresso geral</span>
               <span>{allTopics.filter((t) => t.status === "done").length}/{allTopics.length} · {donePct}%</span>
             </div>
@@ -193,7 +193,7 @@ export function StudyProjectPage() {
         ] as const).map(([key, label, Icon]) => (
           <button key={key} onClick={() => setTab(key)}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-              tab === key ? "bg-surface-3 text-foreground shadow-sm" : "text-foreground/40 hover:text-foreground/70"
+              tab === key ? "bg-surface-3 text-foreground shadow-sm" : "text-foreground/65 hover:text-foreground"
             }`}>
             <Icon className="w-4 h-4" /> {label}
           </button>
@@ -205,7 +205,7 @@ export function StudyProjectPage() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
           {tracks.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-foreground/40 text-sm mb-4">Nenhuma trilha ainda. Crie a primeira!</p>
+              <p className="text-foreground/65 text-sm mb-4">Nenhuma trilha ainda. Crie a primeira!</p>
               <Button onClick={() => setShowTrackModal(true)} size="sm">
                 <Plus className="w-4 h-4" /> Nova trilha
               </Button>
@@ -220,9 +220,9 @@ export function StudyProjectPage() {
                     <button onClick={() => toggleTrack(track.id)}
                       className="w-full flex items-center justify-between p-4 hover:bg-foreground/[0.02] transition-colors group">
                       <div className="flex items-center gap-3">
-                        <GripVertical className="w-4 h-4 text-foreground/20" />
+                        <GripVertical className="w-4 h-4 text-foreground/55" />
                         <span className="font-semibold text-foreground text-sm">{track.title}</span>
-                        <span className="text-xs text-foreground/30 bg-foreground/5 rounded-full px-2 py-0.5">
+                        <span className="text-xs text-foreground/70 bg-foreground/5 rounded-full px-2 py-0.5">
                           {doneCount}/{track.topics.length}
                         </span>
                       </div>
@@ -249,16 +249,16 @@ export function StudyProjectPage() {
                                     <StatusIcon className={`w-4 h-4 ${s.color} transition-colors`} />
                                   </button>
                                   <button onClick={() => navigate(`/estudos/${projectId}/topico/${topic.id}`)}
-                                    className="flex-1 text-left text-sm text-foreground/70 hover:text-foreground transition-colors">
+                                    className="flex-1 text-left text-sm text-foreground/85 hover:text-foreground transition-colors">
                                     {topic.title}
                                   </button>
                                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
                                     <button onClick={() => navigate(`/estudos/${projectId}/topico/${topic.id}`)}
-                                      className="p-1 rounded-lg text-foreground/30 hover:text-studies hover:bg-studies/10 transition-all">
+                                      className="p-1 rounded-lg text-foreground/60 hover:text-studies hover:bg-studies/10 transition-all">
                                       <Pencil className="w-3 h-3" />
                                     </button>
                                     <button onClick={() => handleDeleteTopic(track.id, topic.id)}
-                                      className="p-1 rounded-lg text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                                      className="p-1 rounded-lg text-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all">
                                       <Trash2 className="w-3 h-3" />
                                     </button>
                                   </div>
@@ -279,13 +279,13 @@ export function StudyProjectPage() {
                                 <Button size="sm" onClick={() => handleCreateTopic(track.id)} loading={savingTopic} disabled={!topicTitle.trim()}>
                                   Adicionar
                                 </Button>
-                                <button onClick={() => { setAddingTopicToTrack(null); setTopicTitle(""); }} className="p-1 text-foreground/30 hover:text-foreground">
+                                <button onClick={() => { setAddingTopicToTrack(null); setTopicTitle(""); }} className="p-1 text-foreground/60 hover:text-foreground">
                                   <X className="w-4 h-4" />
                                 </button>
                               </div>
                             ) : (
                               <button onClick={() => { setAddingTopicToTrack(track.id); setTopicTitle(""); }}
-                                className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-foreground/30 hover:text-foreground/60 hover:bg-foreground/[0.02] transition-all">
+                                className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-foreground/65 hover:text-foreground hover:bg-foreground/[0.02] transition-all">
                                 <Plus className="w-3.5 h-3.5" /> Adicionar tópico
                               </button>
                             )}
@@ -308,7 +308,7 @@ export function StudyProjectPage() {
       {/* ── Terminal Tab ── */}
       {tab === "terminal" && projectId && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <p className="text-sm text-foreground/40 mb-4">
+          <p className="text-sm text-foreground/65 mb-4">
             Playground de código — escreva, execute e experimente JavaScript, HTML e CSS diretamente aqui.
             Seus projetos ficam salvos neste projeto de estudos.
           </p>

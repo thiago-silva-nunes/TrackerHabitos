@@ -91,12 +91,12 @@ export function DashboardPage() {
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm text-foreground/40 mb-1 capitalize">{today}</p>
+            <p className="text-sm text-foreground/65 mb-1 capitalize">{today}</p>
             <h1 className="text-2xl font-bold text-foreground">
               {greeting},{" "}
               <span className="text-habits capitalize">{firstName}</span> 👋
             </h1>
-            <p className="text-sm text-foreground/40 mt-1">
+            <p className="text-sm text-foreground/65 mt-1">
               Aqui está o seu resumo de hoje.
             </p>
           </div>
@@ -127,14 +127,14 @@ export function DashboardPage() {
             className="bg-surface-1 rounded-2xl border border-foreground/6 p-4"
           >
             <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-xs text-foreground/40 mt-1">{stat.label}</p>
+            <p className="text-xs text-foreground/65 mt-1">{stat.label}</p>
           </div>
         ))}
       </motion.div>
 
       {/* Module cards */}
       <div className="mb-4">
-        <h2 className="text-sm font-semibold text-foreground/40 uppercase tracking-widest mb-4">
+        <h2 className="text-sm font-semibold text-foreground/65 uppercase tracking-widest mb-4">
           Módulos ativos
         </h2>
 
@@ -182,7 +182,7 @@ export function DashboardPage() {
                       </div>
                       <div>
                         <p className="font-semibold text-foreground text-sm">{mod.name}</p>
-                        <p className="text-xs text-foreground/40 mt-0.5">
+                        <p className="text-xs text-foreground/65 mt-0.5">
                           {MODULE_DESCRIPTIONS[key]}
                         </p>
                       </div>
@@ -196,7 +196,7 @@ export function DashboardPage() {
                   <div className="mt-4 h-1 rounded-full bg-foreground/6 overflow-hidden">
                     <div className="h-full w-0 rounded-full bg-current opacity-40" />
                   </div>
-                  <p className="text-xs text-foreground/25 mt-1.5">
+                  <p className="text-xs text-foreground/60 mt-1.5">
                     Em breve: dados reais
                   </p>
                 </motion.button>

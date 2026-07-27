@@ -23,7 +23,7 @@ export function ComingSoonPage({ moduleName }: ComingSoonPageProps) {
         </div>
         <div>
           <h2 className="text-xl font-bold text-foreground">{moduleName}</h2>
-          <p className="text-sm text-foreground/40 mt-2">
+          <p className="text-sm text-foreground/65 mt-2">
             Este módulo está sendo construído. <br />
             Ele estará disponível na próxima etapa!
           </p>

@@ -15,7 +15,7 @@ import { CodeEditor } from "@/components/ui/CodeEditor";
 import { StudyTopic, TopicResource, TopicStatus } from "@/types/studies";
 
 const STATUS_OPTIONS: { value: TopicStatus; label: string; icon: React.ElementType; color: string }[] = [
-  { value: "pending",     label: "Pendente",      icon: Circle,       color: "text-foreground/30" },
+  { value: "pending",     label: "Pendente",      icon: Circle,       color: "text-foreground/60" },
   { value: "in_progress", label: "Em progresso",  icon: Clock,        color: "text-studies"       },
   { value: "done",        label: "Concluído",     icon: CheckCircle2, color: "text-green-400"     },
 ];
@@ -39,6 +39,7 @@ function getYouTubeId(url: string): string | null {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
     /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/live\/([a-zA-Z0-9_-]{11})/,
   ];
   for (const p of patterns) { const m = url.match(p); if (m) return m[1]; }
   return null;
@@ -278,21 +279,21 @@ export function StudyTopicPage() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-        <button onClick={() => navigate(`/estudos/${projectId}`)} className="flex items-center gap-1.5 text-sm text-foreground/40 hover:text-foreground/70 transition-colors mb-4">
+         <button onClick={() => navigate(`/estudos/${projectId}`)} className="flex items-center gap-1.5 text-sm text-foreground/65 hover:text-foreground transition-colors mb-4">
           <ArrowLeft className="w-4 h-4" /> Voltar ao projeto
         </button>
         <h1 className="text-xl font-bold text-foreground leading-snug">{topic.title}</h1>
 
         {/* Status */}
         <div className="flex items-center gap-2 mt-3 flex-wrap">
-          <span className="text-xs text-foreground/30">Status:</span>
+           <span className="text-xs text-foreground/65">Status:</span>
           <div className="flex gap-1">
             {STATUS_OPTIONS.map((opt) => {
               const Icon = opt.icon;
               const isActive = topic.status === opt.value;
               return (
                 <button key={opt.value} onClick={() => handleStatusChange(opt.value)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${isActive ? "bg-foreground/10 text-foreground" : "text-foreground/30 hover:text-foreground/60 hover:bg-foreground/5"}`}>
+                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${isActive ? "bg-foreground/10 text-foreground" : "text-foreground/65 hover:text-foreground hover:bg-foreground/5"}`}>
                   <Icon className={`w-3.5 h-3.5 ${isActive ? opt.color : ""}`} />
                   {opt.label}
                 </button>
@@ -301,7 +302,7 @@ export function StudyTopicPage() {
           </div>
         </div>
         {resources.length > 1 && (
-          <p className="text-xs text-foreground/25 mt-2 flex items-center gap-1">
+           <p className="text-xs text-foreground/60 mt-2 flex items-center gap-1">
             <GripVertical className="w-3 h-3" /> Arraste os cards para reordenar
           </p>
         )}
@@ -311,7 +312,7 @@ export function StudyTopicPage() {
       <div className="space-y-3 mb-6">
         {resources.length === 0 && (
           <div className="text-center py-10 border border-dashed border-foreground/10 rounded-2xl">
-            <p className="text-foreground/30 text-sm">Nenhum recurso ainda. Adicione vídeos, anotações ou código abaixo.</p>
+             <p className="text-foreground/65 text-sm">Nenhum recurso ainda. Adicione vídeos, anotações ou código abaixo.</p>
           </div>
         )}
 
@@ -335,22 +336,24 @@ export function StudyTopicPage() {
             >
               {/* Drag handle */}
               <div className="absolute left-0 top-0 bottom-0 w-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-grab">
-                <GripVertical className="w-4 h-4 text-foreground/30" />
+                <GripVertical className="w-4 h-4 text-foreground/60" />
               </div>
 
               {/* ── YouTube ── */}
               {resource.type === "youtube" && (
-                <div className="flex gap-4 p-4">
+                 <div className="p-4">
                   {(() => {
                     const vid = resource.url ? getYouTubeId(resource.url) : null;
                     return vid ? (
-                      <div className="relative flex-shrink-0 w-28 h-20 rounded-xl overflow-hidden bg-surface-3">
-                        <img src={`https://img.youtube.com/vi/${vid}/mqdefault.jpg`} alt="" className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                          <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center">
-                            <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-white border-b-[5px] border-b-transparent ml-0.5" />
-                          </div>
-                        </div>
+                       <div className="aspect-video w-full max-w-2xl rounded-xl overflow-hidden bg-black mb-4">
+                         <iframe
+                           src={`https://www.youtube-nocookie.com/embed/${vid}?rel=0`}
+                           title={resource.title ?? "Vídeo do YouTube"}
+                           className="w-full h-full border-0"
+                           loading="lazy"
+                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                           allowFullScreen
+                         />
                       </div>
                     ) : null;
                   })()}
@@ -365,18 +368,18 @@ export function StudyTopicPage() {
                       </div>
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0">
                         <a href={resource.url ?? "#"} target="_blank" rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg text-foreground/30 hover:text-foreground hover:bg-foreground/10 transition-all">
+                          className="p-1.5 rounded-lg text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-all">
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                         <button onClick={() => handleDeleteResource(resource.id)}
-                          className="p-1.5 rounded-lg text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                          className="p-1.5 rounded-lg text-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
                     <a href={resource.url ?? "#"} target="_blank" rel="noopener noreferrer"
-                      className="text-xs text-foreground/30 hover:text-studies transition-colors truncate block mt-1">
-                      {resource.url}
+                      className="text-xs text-foreground/65 hover:text-studies transition-colors truncate block mt-1">
+                       {resource.url}
                     </a>
                   </div>
                 </div>
@@ -391,7 +394,7 @@ export function StudyTopicPage() {
                         <FileText className="w-3.5 h-3.5 text-studies" />
                         <span className="text-xs text-studies font-medium">{resource.title}</span>
                       </div>
-                      <button onClick={() => setEditingResource(null)} className="text-foreground/30 hover:text-foreground p-1"><X className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => setEditingResource(null)} className="text-foreground/60 hover:text-foreground p-1"><X className="w-3.5 h-3.5" /></button>
                     </div>
                     <textarea autoFocus value={editContent} onChange={(e) => setEditContent(e.target.value)}
                       rows={8} className="w-full bg-surface-3 border border-studies/40 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none resize-none font-mono leading-relaxed mb-3" />
@@ -409,18 +412,18 @@ export function StudyTopicPage() {
                       </div>
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0">
                         <button onClick={() => { setEditingResource(resource); setEditContent(resource.content ?? ""); }}
-                          className="p-1.5 rounded-lg text-foreground/30 hover:text-studies hover:bg-studies/10 transition-all">
+                          className="p-1.5 rounded-lg text-foreground/60 hover:text-studies hover:bg-studies/10 transition-all">
                           <Save className="w-3.5 h-3.5" />
                         </button>
                         <button onClick={() => handleDeleteResource(resource.id)}
-                          className="p-1.5 rounded-lg text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                          className="p-1.5 rounded-lg text-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
                     <pre className="text-sm text-foreground/70 whitespace-pre-wrap font-sans leading-relaxed">{resource.content}</pre>
                     <button onClick={() => { setEditingResource(resource); setEditContent(resource.content ?? ""); }}
-                      className="mt-3 text-xs text-foreground/25 hover:text-studies transition-colors">Clique para editar</button>
+                      className="mt-3 text-xs text-foreground/60 hover:text-studies transition-colors">Clique para editar</button>
                   </div>
                 )
               )}
@@ -447,12 +450,12 @@ export function StudyTopicPage() {
                       )}
                       {editingResource?.id === resource.id ? null : (
                         <button onClick={() => { setEditingResource(resource); setEditContent(resource.content ?? ""); }}
-                          className="p-1.5 rounded text-foreground/30 hover:text-studies hover:bg-studies/10 transition-all">
+                          className="p-1.5 rounded text-foreground/60 hover:text-studies hover:bg-studies/10 transition-all">
                           <Save className="w-3.5 h-3.5" />
                         </button>
                       )}
                       <button onClick={() => handleDeleteResource(resource.id)}
-                        className="p-1.5 rounded text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                        className="p-1.5 rounded text-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -496,7 +499,7 @@ export function StudyTopicPage() {
                       </div>
                       <div className="space-y-1">
                         {codeOutput[resource.id].length === 0
-                          ? <p className="text-xs text-foreground/30 font-mono">Nenhuma saída</p>
+                          ? <p className="text-xs text-foreground/60 font-mono">Nenhuma saída</p>
                           : codeOutput[resource.id].map((line, i) => (
                             <pre key={i} className={`text-xs font-mono ${line.startsWith("✖") ? "text-red-400" : "text-[#c8c8d8]"}`}>{line}</pre>
                           ))
@@ -534,17 +537,17 @@ export function StudyTopicPage() {
             className="bg-surface-1 border border-foreground/8 rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2"><Youtube className="w-4 h-4 text-red-400" /><span className="font-medium text-foreground text-sm">Adicionar vídeo do YouTube</span></div>
-              <button onClick={() => { setAddMode(null); setYtUrl(""); setYtTitle(""); }} className="text-foreground/30 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
+              <button onClick={() => { setAddMode(null); setYtUrl(""); setYtTitle(""); }} className="text-foreground/60 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-3 mb-4">
               <div>
-                <label className="text-xs text-foreground/40 font-medium block mb-1.5">URL do vídeo *</label>
+                <label className="text-xs text-foreground/65 font-medium block mb-1.5">URL do vídeo *</label>
                 <input autoFocus value={ytUrl} onChange={(e) => setYtUrl(e.target.value)}
                   placeholder="https://www.youtube.com/watch?v=..."
                   className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors" />
               </div>
               <div>
-                <label className="text-xs text-foreground/40 font-medium block mb-1.5">Título (opcional)</label>
+                <label className="text-xs text-foreground/65 font-medium block mb-1.5">Título (opcional)</label>
                 <input value={ytTitle} onChange={(e) => setYtTitle(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleAddYoutube()}
                   placeholder="Título do vídeo..."
                   className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors" />
@@ -571,7 +574,7 @@ export function StudyTopicPage() {
             className="bg-surface-1 border border-foreground/8 rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2"><FileText className="w-4 h-4 text-studies" /><span className="font-medium text-foreground text-sm">Nova anotação</span></div>
-              <button onClick={() => { setAddMode(null); setNoteTitle(""); setNoteContent(""); }} className="text-foreground/30 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
+              <button onClick={() => { setAddMode(null); setNoteTitle(""); setNoteContent(""); }} className="text-foreground/60 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-3 mb-4">
               <input autoFocus value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder="Título (opcional)"
@@ -604,7 +607,7 @@ export function StudyTopicPage() {
                   {LANGUAGES.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
                 </select>
               </div>
-              <button onClick={() => { setAddMode(null); setCodeContent(""); setCodeTitle(""); }} className="text-foreground/30 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
+              <button onClick={() => { setAddMode(null); setCodeContent(""); setCodeTitle(""); }} className="text-foreground/60 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
             </div>
 
             {/* Editor */}
@@ -622,7 +625,7 @@ export function StudyTopicPage() {
 
             {/* Comment/notes below code */}
             <div className="p-4 border-t border-foreground/6">
-              <label className="text-xs text-foreground/40 font-medium block mb-1.5">Comentário / explicação (opcional)</label>
+              <label className="text-xs text-foreground/65 font-medium block mb-1.5">Comentário / explicação (opcional)</label>
               <textarea value={codeComment} onChange={(e) => setCodeComment(e.target.value)} rows={3}
                 placeholder="Anote o que este código faz, por que é importante, quando usar..."
                 className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors resize-none mb-3" />
