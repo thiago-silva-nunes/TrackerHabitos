@@ -9,6 +9,13 @@ function todayKey() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+function thisWeekStart() {
+  const d = new Date();
+  const offset = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - offset);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 function isScheduledToday(habit: Habit) {
   const day = new Date().getDay();
   if (habit.frequency_type === "daily" || habit.frequency_type === "weekly_target") return true;
@@ -29,8 +36,14 @@ export interface DashboardStats {
   todayHabits: Habit[];
   habitCheckinsToday: Set<string>;
 
+  // Events
+  eventsToday: number;
+
   // Studies
   studyProjectsCount: number;
+
+  // Workouts
+  workoutsThisWeek: number;
 
   loading: boolean;
 }
@@ -45,7 +58,9 @@ const DEFAULT_STATS: DashboardStats = {
   bestStreak: 0,
   todayHabits: [],
   habitCheckinsToday: new Set(),
+  eventsToday: 0,
   studyProjectsCount: 0,
+  workoutsThisWeek: 0,
   loading: true,
 };
 
@@ -77,9 +92,10 @@ export function useDashboardStats() {
     if (!user) return;
     setStats((s) => ({ ...s, loading: true }));
     const today = todayKey();
+    const weekStart = thisWeekStart();
 
     try {
-      const [tasksRes, habitsRes, checkinsRes, studiesRes] = await Promise.all([
+      const [tasksRes, habitsRes, checkinsRes, studiesRes, eventsRes, workoutsRes] = await Promise.all([
         supabase
           .from("tasks")
           .select("*")
@@ -104,36 +120,38 @@ export function useDashboardStats() {
           .from("study_projects")
           .select("id", { count: "exact", head: true })
           .eq("user_id", user.id),
+
+        supabase
+          .from("events")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("start_date", today),
+
+        supabase
+          .from("workout_sessions")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .gte("date", weekStart)
+          .lte("date", today),
       ]);
 
       const tasks = (tasksRes.data ?? []) as Task[];
       const habits = (habitsRes.data ?? []) as Habit[];
       const checkins = (checkinsRes.data ?? []) as HabitCheckin[];
-      const studyCount = studiesRes.count ?? 0;
 
-      // Tasks stats
-      const tasksDueToday = tasks.filter(
-        (t) => t.due_date === today && t.status !== "done"
-      ).length;
-      const tasksDoneTodayCount = tasks.filter(
-        (t) => t.due_date === today && t.status === "done"
-      ).length;
-      const tasksOverdue = tasks.filter(
-        (t) => t.due_date && t.due_date < today && t.status !== "done"
-      ).length;
-      const todayTaskList = tasks
-        .filter((t) => t.due_date === today && t.status !== "done")
-        .slice(0, 5);
+      // Tasks
+      const tasksDueToday = tasks.filter((t) => t.due_date === today && t.status !== "done").length;
+      const tasksDoneTodayCount = tasks.filter((t) => t.due_date === today && t.status === "done").length;
+      const tasksOverdue = tasks.filter((t) => t.due_date && t.due_date < today && t.status !== "done").length;
+      const todayTaskList = tasks.filter((t) => t.due_date === today && t.status !== "done").slice(0, 5);
 
-      // Habits stats
+      // Habits
       const checkinSet = new Set(checkins.map((c) => c.habit_id));
-      const checkinDateSet = new Set(checkins.map((c) => c.date));
-      void checkinDateSet;
       const todayHabits = habits.filter(isScheduledToday);
       const habitsDueToday = todayHabits.length;
       const habitsDoneToday = todayHabits.filter((h) => checkinSet.has(h.id)).length;
 
-      // Best streak (simplified — only uses today's checkins)
+      // Best streak (using today checkins only for speed)
       const allCheckinsMap = new Map<string, Set<string>>();
       checkins.forEach((c) => {
         if (!allCheckinsMap.has(c.habit_id)) allCheckinsMap.set(c.habit_id, new Set());
@@ -156,7 +174,9 @@ export function useDashboardStats() {
         bestStreak,
         todayHabits: todayHabits.slice(0, 4),
         habitCheckinsToday: checkinSet,
-        studyProjectsCount: studyCount,
+        eventsToday: eventsRes.count ?? 0,
+        studyProjectsCount: studiesRes.count ?? 0,
+        workoutsThisWeek: workoutsRes.count ?? 0,
         loading: false,
       });
     } catch {

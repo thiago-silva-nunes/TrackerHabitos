@@ -643,7 +643,7 @@ export function TasksPage() {
                       type="date"
                       value={form.due_date}
                       onChange={(e) => setForm((p) => ({ ...p, due_date: e.target.value }))}
-                      className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground outline-none focus:border-tasks/50 [color-scheme:dark]"
+                      className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground outline-none focus:border-tasks/50 dark:[color-scheme:dark]"
                     />
                   </div>
                   <div>
@@ -655,7 +655,7 @@ export function TasksPage() {
                       type="time"
                       value={form.due_time}
                       onChange={(e) => setForm((p) => ({ ...p, due_time: e.target.value }))}
-                      className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground outline-none focus:border-tasks/50 [color-scheme:dark]"
+                      className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground outline-none focus:border-tasks/50 dark:[color-scheme:dark]"
                     />
                   </div>
                 </div>

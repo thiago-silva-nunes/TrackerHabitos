@@ -102,6 +102,14 @@ export function DashboardPage() {
       const n = stats.studyProjectsCount;
       return { value: n > 0 ? 1 : 0, label: `${n} projeto${n !== 1 ? "s" : ""} de estudo` };
     }
+    if (key === "events") {
+      const n = stats.eventsToday;
+      return { value: n > 0 ? 1 : 0, label: n === 0 ? "Sem eventos hoje" : `${n} evento${n !== 1 ? "s" : ""} hoje` };
+    }
+    if (key === "workouts") {
+      const n = stats.workoutsThisWeek;
+      return { value: Math.min(n / 5, 1), label: `${n} treino${n !== 1 ? "s" : ""} esta semana` };
+    }
     return { value: 0, label: "Em breve" };
   }
 
@@ -153,15 +161,16 @@ export function DashboardPage() {
           onClick={() => navigate("/habitos")}
         />
         <StatCard
-          label="Estudos"
-          value={stats.loading ? "—" : `${stats.studyProjectsCount}`}
-          color="text-studies"
-          onClick={() => navigate("/estudos")}
+          label="Eventos hoje"
+          value={stats.loading ? "—" : `${stats.eventsToday}`}
+          color="text-events"
+          onClick={() => navigate("/eventos")}
         />
         <StatCard
-          label="Melhor streak"
-          value={stats.loading ? "—" : `${stats.bestStreak}🔥`}
-          color="text-orange-400"
+          label="Treinos na semana"
+          value={stats.loading ? "—" : `${stats.workoutsThisWeek}`}
+          color="text-workouts"
+          onClick={() => navigate("/treinos")}
         />
       </motion.div>
 

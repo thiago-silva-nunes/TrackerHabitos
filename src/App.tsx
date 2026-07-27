@@ -16,6 +16,8 @@ import { StudyProjectPage } from "@/pages/estudos/StudyProjectPage";
 import { StudyTopicPage } from "@/pages/estudos/StudyTopicPage";
 import { HabitsPage } from "@/pages/HabitsPage";
 import { TasksPage } from "@/pages/TasksPage";
+import { EventsPage } from "@/pages/EventsPage";
+import { WorkoutsPage } from "@/pages/WorkoutsPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
@@ -68,11 +70,11 @@ export default function App() {
 
             {/* Module routes */}
             <Route path="/tarefas" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
-            <Route path="/eventos" element={<ProtectedRoute><ComingSoonPage moduleName="Módulo Eventos" /></ProtectedRoute>} />
+            <Route path="/eventos" element={<ProtectedRoute><EventsPage /></ProtectedRoute>} />
             <Route path="/estudos" element={<ProtectedRoute><StudiesPage /></ProtectedRoute>} />
             <Route path="/estudos/:projectId" element={<ProtectedRoute><StudyProjectPage /></ProtectedRoute>} />
             <Route path="/estudos/:projectId/topico/:topicId" element={<ProtectedRoute><StudyTopicPage /></ProtectedRoute>} />
-            <Route path="/treinos" element={<ProtectedRoute><ComingSoonPage moduleName="Módulo Treinos" /></ProtectedRoute>} />
+            <Route path="/treinos" element={<ProtectedRoute><WorkoutsPage /></ProtectedRoute>} />
             <Route path="/habitos" element={<ProtectedRoute><HabitsPage /></ProtectedRoute>} />
 
             <Route path="*" element={<Navigate to="/" replace />} />

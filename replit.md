@@ -142,6 +142,30 @@ create policy "Users manage own habit_checkins" on public.habit_checkins for all
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
 ```
 
+### Etapa 3 — Módulo de Eventos
+
+Execute no SQL Editor do Supabase:
+
+```sql
+create table public.events (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  description text,
+  start_date date not null,
+  start_time time,
+  end_date date,
+  end_time time,
+  is_all_day boolean not null default false,
+  color text not null default '#ec4899',
+  location text,
+  created_at timestamptz not null default now()
+);
+alter table public.events enable row level security;
+create policy "Users manage own events" on public.events for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+```
+
 ### Etapa 5 — Módulo de Estudos
 
 Execute no SQL Editor do Supabase:
@@ -248,6 +272,54 @@ create policy "Users manage own test_attempts" on public.test_attempts for all
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
 ```
 
+### Etapa 6 — Módulo de Treinos
+
+Execute no SQL Editor do Supabase:
+
+```sql
+create table public.workout_plans (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  name text not null,
+  description text,
+  color text not null default '#f97316',
+  days_of_week integer[] not null default '{}',
+  created_at timestamptz not null default now()
+);
+alter table public.workout_plans enable row level security;
+create policy "Users manage own workout_plans" on public.workout_plans for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create table public.exercises (
+  id uuid primary key default gen_random_uuid(),
+  plan_id uuid references public.workout_plans(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  name text not null,
+  sets integer,
+  reps text,
+  weight_kg numeric,
+  notes text,
+  sort_order integer not null default 0
+);
+alter table public.exercises enable row level security;
+create policy "Users manage own exercises" on public.exercises for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create table public.workout_sessions (
+  id uuid primary key default gen_random_uuid(),
+  plan_id uuid references public.workout_plans(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  date date not null,
+  notes text,
+  completed boolean not null default true,
+  duration_minutes integer,
+  created_at timestamptz not null default now()
+);
+alter table public.workout_sessions enable row level security;
+create policy "Users manage own workout_sessions" on public.workout_sessions for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+```
+
 ## Arquitetura de módulos
 
 O sistema é construído em torno de **módulos plugáveis**. Para adicionar um novo módulo:
@@ -264,11 +336,11 @@ O `ModuleContext` e a tabela `modules` não precisam de alterações.
 | Etapa | Status | Descrição |
 |---|---|---|
 | 1 — Fundação | ✅ Concluída | Auth, navegação, sistema de módulos, dashboard |
-| 2 — Tarefas | 🔜 Próxima | CRUD + Kanban + recorrência |
-| 3 — Eventos | ⏳ | Calendário + CRUD |
+| 2 — Tarefas | ✅ Concluída | CRUD + Kanban + recorrência + prioridades |
+| 3 — Eventos | ✅ Concluída | Calendário mensal + CRUD + cores |
 | 4 — Hábitos | ✅ Concluída | Criação, edição, frequência, check-ins e sequências |
-| 5 — Estudos | ⏳ | Matérias + sessões + gráficos |
-| 6 — Treinos | ⏳ | Treinos + logs + progressão |
+| 5 — Estudos | ✅ Concluída | Matérias, trilhas, tópicos, recursos e testes |
+| 6 — Treinos | ✅ Concluída | Planos + exercícios + sessões + histórico |
 | 7 — Painel Módulos | ⏳ | Ativar/reordenar módulos |
 | 8 — Polimento | ⏳ | Animações, modo claro, conquistas |
 
