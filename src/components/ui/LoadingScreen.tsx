@@ -21,7 +21,7 @@ export function LoadingScreen() {
             />
           </svg>
         </div>
-        <span className="text-white/40 text-sm tracking-wide">Carregando…</span>
+        <span className="text-foreground/40 text-sm tracking-wide">Carregando…</span>
       </motion.div>
 
       {/* Pulse ring */}

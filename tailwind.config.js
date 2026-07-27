@@ -5,18 +5,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Base neutrals
+        // Base surfaces — adapt via CSS variables (dark/light)
         surface: {
-          DEFAULT: "#0f0f13",
-          1: "#16161d",
-          2: "#1c1c26",
-          3: "#222230",
+          DEFAULT: "rgb(var(--color-surface) / <alpha-value>)",
+          1: "rgb(var(--color-surface-1) / <alpha-value>)",
+          2: "rgb(var(--color-surface-2) / <alpha-value>)",
+          3: "rgb(var(--color-surface-3) / <alpha-value>)",
         },
+        // Adaptive text/foreground color
+        foreground: "rgb(var(--color-foreground) / <alpha-value>)",
+        // Adaptive border
         border: {
-          DEFAULT: "rgba(255,255,255,0.06)",
-          subtle: "rgba(255,255,255,0.03)",
+          DEFAULT: "rgb(var(--color-foreground) / 0.06)",
+          subtle: "rgb(var(--color-foreground) / 0.03)",
         },
-        // Module accent colours
+        // Module accent colours (unchanged)
         tasks: {
           DEFAULT: "#3b82f6",
           light: "#60a5fa",

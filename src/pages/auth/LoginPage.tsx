@@ -42,55 +42,55 @@ export function LoginPage() {
               <path d="M5 12.5l4.5 4.5 9.5-9.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <h1 className="text-xl font-bold text-white">Tracker Hábitos</h1>
-          <p className="text-sm text-white/40 mt-1">Seu sistema operacional pessoal</p>
+          <h1 className="text-xl font-bold text-foreground">Tracker Hábitos</h1>
+          <p className="text-sm text-foreground/40 mt-1">Seu sistema operacional pessoal</p>
         </div>
 
         {/* Card */}
-        <div className="bg-surface-1 rounded-2xl border border-white/6 p-6 space-y-5">
+        <div className="bg-surface-1 rounded-2xl border border-foreground/6 p-6 space-y-5">
           <div>
-            <h2 className="text-lg font-semibold text-white">Entrar</h2>
-            <p className="text-sm text-white/40 mt-0.5">Bem-vindo de volta!</p>
+            <h2 className="text-lg font-semibold text-foreground">Entrar</h2>
+            <p className="text-sm text-foreground/40 mt-0.5">Bem-vindo de volta!</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white/50 uppercase tracking-wide">
+              <label className="text-xs font-medium text-foreground/50 uppercase tracking-wide">
                 E-mail
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/25" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="seu@email.com"
-                  className="w-full bg-surface-2 border border-white/8 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-habits/50 transition-colors"
+                  className="w-full bg-surface-2 border border-foreground/8 rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground placeholder-foreground/20 focus:outline-none focus:border-habits/50 transition-colors"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white/50 uppercase tracking-wide">
+              <label className="text-xs font-medium text-foreground/50 uppercase tracking-wide">
                 Senha
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/25" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-surface-2 border border-white/8 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-habits/50 transition-colors"
+                  className="w-full bg-surface-2 border border-foreground/8 rounded-xl pl-10 pr-10 py-2.5 text-sm text-foreground placeholder-foreground/20 focus:outline-none focus:border-habits/50 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/60 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/25 hover:text-foreground/60 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -102,7 +102,7 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <p className="text-center text-sm text-white/40">
+          <p className="text-center text-sm text-foreground/40">
             Não tem conta?{" "}
             <Link to="/cadastro" className="text-habits hover:text-habits-light transition-colors font-medium">
               Criar conta

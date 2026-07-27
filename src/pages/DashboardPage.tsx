@@ -91,12 +91,12 @@ export function DashboardPage() {
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm text-white/40 mb-1 capitalize">{today}</p>
-            <h1 className="text-2xl font-bold text-white">
+            <p className="text-sm text-foreground/40 mb-1 capitalize">{today}</p>
+            <h1 className="text-2xl font-bold text-foreground">
               {greeting},{" "}
               <span className="text-habits capitalize">{firstName}</span> 👋
             </h1>
-            <p className="text-sm text-white/40 mt-1">
+            <p className="text-sm text-foreground/40 mt-1">
               Aqui está o seu resumo de hoje.
             </p>
           </div>
@@ -124,17 +124,17 @@ export function DashboardPage() {
         ].map((stat) => (
           <div
             key={stat.label}
-            className="bg-surface-1 rounded-2xl border border-white/6 p-4"
+            className="bg-surface-1 rounded-2xl border border-foreground/6 p-4"
           >
             <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-xs text-white/40 mt-1">{stat.label}</p>
+            <p className="text-xs text-foreground/40 mt-1">{stat.label}</p>
           </div>
         ))}
       </motion.div>
 
       {/* Module cards */}
       <div className="mb-4">
-        <h2 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">
+        <h2 className="text-sm font-semibold text-foreground/40 uppercase tracking-widest mb-4">
           Módulos ativos
         </h2>
 
@@ -145,8 +145,8 @@ export function DashboardPage() {
             ))}
           </div>
         ) : activeModules.length === 0 ? (
-          <div className="bg-surface-1 rounded-2xl border border-white/6 p-8 text-center">
-            <p className="text-white/40 text-sm">
+          <div className="bg-surface-1 rounded-2xl border border-foreground/6 p-8 text-center">
+            <p className="text-foreground/40 text-sm">
               Nenhum módulo ativo.{" "}
               <button
                 onClick={() => navigate("/modulos")}
@@ -181,8 +181,8 @@ export function DashboardPage() {
                         <Icon className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="font-semibold text-white text-sm">{mod.name}</p>
-                        <p className="text-xs text-white/40 mt-0.5">
+                        <p className="font-semibold text-foreground text-sm">{mod.name}</p>
+                        <p className="text-xs text-foreground/40 mt-0.5">
                           {MODULE_DESCRIPTIONS[key]}
                         </p>
                       </div>
@@ -193,10 +193,10 @@ export function DashboardPage() {
                   </div>
 
                   {/* Placeholder progress bar */}
-                  <div className="mt-4 h-1 rounded-full bg-white/6 overflow-hidden">
+                  <div className="mt-4 h-1 rounded-full bg-foreground/6 overflow-hidden">
                     <div className="h-full w-0 rounded-full bg-current opacity-40" />
                   </div>
-                  <p className="text-xs text-white/25 mt-1.5">
+                  <p className="text-xs text-foreground/25 mt-1.5">
                     Em breve: dados reais
                   </p>
                 </motion.button>

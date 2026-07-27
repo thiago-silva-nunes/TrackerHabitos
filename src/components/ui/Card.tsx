@@ -13,7 +13,7 @@ export function Card({ children, glass = false, className, ...props }: CardProps
         "rounded-2xl border",
         glass
           ? "glass"
-          : "bg-surface-1 border-white/6",
+          : "bg-surface-1 border-foreground/6",
         className
       )}
       {...props}

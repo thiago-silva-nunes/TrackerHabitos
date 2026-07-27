@@ -18,12 +18,12 @@ export function ComingSoonPage({ moduleName }: ComingSoonPageProps) {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="space-y-4"
       >
-        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto">
-          <Construction className="w-8 h-8 text-white/30" />
+        <div className="w-16 h-16 rounded-2xl bg-foreground/5 flex items-center justify-center mx-auto">
+          <Construction className="w-8 h-8 text-foreground/30" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-white">{moduleName}</h2>
-          <p className="text-sm text-white/40 mt-2">
+          <h2 className="text-xl font-bold text-foreground">{moduleName}</h2>
+          <p className="text-sm text-foreground/40 mt-2">
             Este módulo está sendo construído. <br />
             Ele estará disponível na próxima etapa!
           </p>

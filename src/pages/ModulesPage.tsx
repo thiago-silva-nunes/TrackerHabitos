@@ -52,8 +52,8 @@ export function ModulesPage() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-2xl font-bold text-white">Meus Módulos</h1>
-        <p className="text-sm text-white/40 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Meus Módulos</h1>
+        <p className="text-sm text-foreground/40 mt-1">
           Ative ou desative módulos conforme sua rotina. Novas funcionalidades chegam como novos módulos.
         </p>
       </motion.div>
@@ -72,30 +72,30 @@ export function ModulesPage() {
                 "flex items-center gap-4 p-4 rounded-2xl border transition-all",
                 mod.is_active
                   ? COLOR_ACTIVE_BG[key]
-                  : "bg-surface-1 border-white/6 opacity-60"
+                  : "bg-surface-1 border-foreground/6 opacity-60"
               )}
             >
               {/* Icon */}
               <div
                 className={cn(
                   "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
-                  mod.is_active ? "bg-black/20" : "bg-white/5"
+                  mod.is_active ? "bg-black/20" : "bg-foreground/5"
                 )}
               >
                 <Icon
                   className={cn(
                     "w-5 h-5",
-                    mod.is_active ? COLOR_ICON[key] : "text-white/30"
+                    mod.is_active ? COLOR_ICON[key] : "text-foreground/30"
                   )}
                 />
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <p className={cn("font-semibold text-sm", mod.is_active ? "text-white" : "text-white/40")}>
+                <p className={cn("font-semibold text-sm", mod.is_active ? "text-foreground" : "text-foreground/40")}>
                   {mod.name}
                 </p>
-                <p className="text-xs text-white/30">{MODULE_DESCRIPTIONS[key]}</p>
+                <p className="text-xs text-foreground/30">{MODULE_DESCRIPTIONS[key]}</p>
               </div>
 
               {/* Toggle */}
@@ -104,7 +104,7 @@ export function ModulesPage() {
                 onClick={() => toggleModule(mod.key)}
                 className={cn(
                   "relative w-11 h-6 rounded-full transition-all flex-shrink-0 focus:outline-none",
-                  mod.is_active ? "bg-habits" : "bg-white/10"
+                  mod.is_active ? "bg-habits" : "bg-foreground/10"
                 )}
                 aria-label={mod.is_active ? "Desativar" : "Ativar"}
               >
@@ -120,7 +120,7 @@ export function ModulesPage() {
         })}
       </div>
 
-      <p className="text-xs text-white/20 text-center mt-8">
+      <p className="text-xs text-foreground/20 text-center mt-8">
         Mais módulos chegando em breve: Finanças, Leitura, Sono, Água, Metas…
       </p>
     </div>

@@ -120,9 +120,9 @@ export function StudiesPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <BookOpen className="w-5 h-5 text-studies" />
-            <h1 className="text-xl font-bold text-white">Estudos</h1>
+            <h1 className="text-xl font-bold text-foreground">Estudos</h1>
           </div>
-          <p className="text-sm text-white/40">Seus projetos de aprendizagem</p>
+          <p className="text-sm text-foreground/40">Seus projetos de aprendizagem</p>
         </div>
         <Button onClick={() => setShowModal(true)} size="sm">
           <Plus className="w-4 h-4" /> Novo projeto
@@ -145,8 +145,8 @@ export function StudiesPage() {
           <div className="w-16 h-16 rounded-2xl bg-studies/10 flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-8 h-8 text-studies" />
           </div>
-          <p className="text-white/60 font-medium mb-1">Nenhum projeto ainda</p>
-          <p className="text-white/30 text-sm mb-6">Crie seu primeiro projeto de estudos</p>
+          <p className="text-foreground/60 font-medium mb-1">Nenhum projeto ainda</p>
+          <p className="text-foreground/30 text-sm mb-6">Crie seu primeiro projeto de estudos</p>
           <Button onClick={() => setShowModal(true)}>
             <Plus className="w-4 h-4" /> Criar projeto
           </Button>
@@ -172,9 +172,9 @@ export function StudiesPage() {
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{project.emoji}</span>
                       <div>
-                        <p className="font-semibold text-white text-sm leading-snug">{project.title}</p>
+                        <p className="font-semibold text-foreground text-sm leading-snug">{project.title}</p>
                         {project.description && (
-                          <p className="text-xs text-white/40 mt-0.5 line-clamp-1">{project.description}</p>
+                          <p className="text-xs text-foreground/40 mt-0.5 line-clamp-1">{project.description}</p>
                         )}
                       </div>
                     </div>
@@ -182,7 +182,7 @@ export function StudiesPage() {
                       <button
                         onClick={(e) => handleDelete(project.id, e)}
                         disabled={deletingId === project.id}
-                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -191,13 +191,13 @@ export function StudiesPage() {
                   </div>
                   {/* Progress */}
                   <div className="space-y-1.5">
-                    <div className="h-1.5 rounded-full bg-white/6 overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-foreground/6 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-studies transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-xs text-white/30">
+                    <p className="text-xs text-foreground/30">
                       {project.done_topics}/{project.total_topics} tópicos concluídos · {pct}%
                     </p>
                   </div>
@@ -223,25 +223,25 @@ export function StudiesPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-surface-2 border border-white/8 rounded-2xl p-6 w-full max-w-md"
+              className="bg-surface-2 border border-foreground/8 rounded-2xl p-6 w-full max-w-md"
             >
               <div className="flex items-center justify-between mb-5">
-                <h2 className="font-bold text-white">Novo Projeto</h2>
-                <button onClick={() => setShowModal(false)} className="text-white/40 hover:text-white p-1">
+                <h2 className="font-bold text-foreground">Novo Projeto</h2>
+                <button onClick={() => setShowModal(false)} className="text-foreground/40 hover:text-foreground p-1">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Emoji picker */}
               <div className="mb-4">
-                <p className="text-xs text-white/40 mb-2 font-medium">Ícone</p>
+                <p className="text-xs text-foreground/40 mb-2 font-medium">Ícone</p>
                 <div className="flex flex-wrap gap-2">
                   {EMOJIS.map((e) => (
                     <button
                       key={e}
                       onClick={() => setForm((f) => ({ ...f, emoji: e }))}
                       className={`text-xl w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                        form.emoji === e ? "bg-studies/20 ring-1 ring-studies/60" : "bg-white/5 hover:bg-white/10"
+                        form.emoji === e ? "bg-studies/20 ring-1 ring-studies/60" : "bg-foreground/5 hover:bg-foreground/10"
                       }`}
                     >
                       {e}
@@ -252,24 +252,24 @@ export function StudiesPage() {
 
               <div className="space-y-3 mb-5">
                 <div>
-                  <label className="text-xs text-white/40 font-medium block mb-1.5">Título *</label>
+                  <label className="text-xs text-foreground/40 font-medium block mb-1.5">Título *</label>
                   <input
                     autoFocus
                     value={form.title}
                     onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
                     onKeyDown={(e) => e.key === "Enter" && handleCreate()}
                     placeholder="Ex: Aprender React, Master TypeScript..."
-                    className="w-full bg-surface-3 border border-white/8 rounded-xl px-3 py-2.5 text-sm text-white placeholder-white/25 outline-none focus:border-studies/50 transition-colors"
+                    className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-white/40 font-medium block mb-1.5">Descrição (opcional)</label>
+                  <label className="text-xs text-foreground/40 font-medium block mb-1.5">Descrição (opcional)</label>
                   <textarea
                     value={form.description}
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                     placeholder="Do que se trata este projeto?"
                     rows={2}
-                    className="w-full bg-surface-3 border border-white/8 rounded-xl px-3 py-2.5 text-sm text-white placeholder-white/25 outline-none focus:border-studies/50 transition-colors resize-none"
+                    className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors resize-none"
                   />
                 </div>
               </div>

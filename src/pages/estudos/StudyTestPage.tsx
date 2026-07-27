@@ -209,8 +209,8 @@ export function StudyTestPage() {
           <div className={`w-20 h-20 rounded-2xl mx-auto flex items-center justify-center mb-4 ${passed ? "bg-green-500/15" : "bg-red-500/15"}`}>
             {passed ? <Trophy className="w-10 h-10 text-green-400" /> : <FlaskConical className="w-10 h-10 text-red-400" />}
           </div>
-          <h1 className="text-2xl font-bold text-white mb-1">{passed ? "Parabéns! 🎉" : "Quase lá!"}</h1>
-          <p className="text-white/40 text-sm mb-4">{test.title}</p>
+          <h1 className="text-2xl font-bold text-foreground mb-1">{passed ? "Parabéns! 🎉" : "Quase lá!"}</h1>
+          <p className="text-foreground/40 text-sm mb-4">{test.title}</p>
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-lg font-bold ${passed ? "bg-green-500/15 text-green-400" : "bg-red-500/15 text-red-400"}`}>
             {lastAttempt.score}/{lastAttempt.total} · {pct}%
           </div>
@@ -227,7 +227,7 @@ export function StudyTestPage() {
                   {isCorrect
                     ? <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
                     : <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />}
-                  <p className="text-sm text-white font-medium">{q.question}</p>
+                  <p className="text-sm text-foreground font-medium">{q.question}</p>
                 </div>
                 <div className="pl-7 space-y-1.5">
                   {q.options.map((opt, oi) => {
@@ -237,14 +237,14 @@ export function StudyTestPage() {
                       <div key={oi} className={`text-xs px-3 py-1.5 rounded-lg ${
                         isCorrectOpt ? "bg-green-500/15 text-green-400" :
                         isChosen && !isCorrectOpt ? "bg-red-500/15 text-red-400" :
-                        "text-white/40"
+                        "text-foreground/40"
                       }`}>
                         {isCorrectOpt && "✓ "}{isChosen && !isCorrectOpt && "✗ "}{opt}
                       </div>
                     );
                   })}
                   {q.explanation && (
-                    <p className="text-xs text-white/40 italic mt-2">💡 {q.explanation}</p>
+                    <p className="text-xs text-foreground/40 italic mt-2">💡 {q.explanation}</p>
                   )}
                 </div>
               </div>
@@ -274,11 +274,11 @@ export function StudyTestPage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
         {/* Progress */}
         <div className="mb-6">
-          <div className="flex items-center justify-between text-xs text-white/40 mb-2">
+          <div className="flex items-center justify-between text-xs text-foreground/40 mb-2">
             <span>Questão {currentQ + 1} de {questions.length}</span>
             <span>{answeredCount}/{questions.length} respondidas</span>
           </div>
-          <div className="h-1.5 rounded-full bg-white/6 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-foreground/6 overflow-hidden">
             <div
               className="h-full rounded-full bg-studies transition-all duration-300"
               style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
@@ -295,8 +295,8 @@ export function StudyTestPage() {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="bg-surface-1 border border-white/8 rounded-2xl p-5 mb-4">
-              <p className="text-white font-medium leading-relaxed">{q.question}</p>
+            <div className="bg-surface-1 border border-foreground/8 rounded-2xl p-5 mb-4">
+              <p className="text-foreground font-medium leading-relaxed">{q.question}</p>
             </div>
 
             <div className="space-y-2 mb-6">
@@ -306,12 +306,12 @@ export function StudyTestPage() {
                   onClick={() => selectAnswer(oi)}
                   className={`w-full text-left px-4 py-3.5 rounded-xl border text-sm transition-all ${
                     selected === oi
-                      ? "bg-studies/15 border-studies/50 text-white"
-                      : "bg-surface-1 border-white/6 text-white/60 hover:border-white/20 hover:text-white"
+                      ? "bg-studies/15 border-studies/50 text-foreground"
+                      : "bg-surface-1 border-foreground/6 text-foreground/60 hover:border-foreground/20 hover:text-foreground"
                   }`}
                 >
                   <span className={`inline-flex w-5 h-5 rounded-full items-center justify-center text-xs font-bold mr-3 flex-shrink-0 ${
-                    selected === oi ? "bg-studies text-white" : "bg-white/10 text-white/40"
+                    selected === oi ? "bg-studies text-foreground" : "bg-foreground/10 text-foreground/40"
                   }`}>
                     {String.fromCharCode(65 + oi)}
                   </span>
@@ -334,7 +334,7 @@ export function StudyTestPage() {
                 onClick={() => setCurrentQ(i)}
                 className={`w-2 h-2 rounded-full transition-all ${
                   i === currentQ ? "bg-studies w-4" :
-                  selectedAnswers[i] !== null ? "bg-studies/40" : "bg-white/15"
+                  selectedAnswers[i] !== null ? "bg-studies/40" : "bg-foreground/15"
                 }`}
               />
             ))}
@@ -352,7 +352,7 @@ export function StudyTestPage() {
 
         <button
           onClick={() => { if (confirm("Abandonar o teste?")) setMode("manage"); }}
-          className="w-full mt-4 text-xs text-white/25 hover:text-white/50 transition-colors py-2"
+          className="w-full mt-4 text-xs text-foreground/25 hover:text-foreground/50 transition-colors py-2"
         >
           Abandonar teste
         </button>
@@ -367,7 +367,7 @@ export function StudyTestPage() {
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
         <button
           onClick={() => navigate(`/estudos/${projectId}`)}
-          className="flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-4"
+          className="flex items-center gap-1.5 text-sm text-foreground/40 hover:text-foreground/70 transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Voltar ao projeto
         </button>
@@ -377,8 +377,8 @@ export function StudyTestPage() {
               <FlaskConical className="w-5 h-5 text-studies" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">{test.title}</h1>
-              {test.description && <p className="text-sm text-white/40 mt-0.5">{test.description}</p>}
+              <h1 className="text-xl font-bold text-foreground">{test.title}</h1>
+              {test.description && <p className="text-sm text-foreground/40 mt-0.5">{test.description}</p>}
             </div>
           </div>
           {questions.length > 0 && (
@@ -391,7 +391,7 @@ export function StudyTestPage() {
         {/* Attempt history */}
         {attempts.length > 0 && (
           <div className="mt-4 flex items-center gap-3 overflow-x-auto pb-1">
-            <span className="text-xs text-white/30 flex-shrink-0">Tentativas:</span>
+            <span className="text-xs text-foreground/30 flex-shrink-0">Tentativas:</span>
             {attempts.slice(0, 5).map((a) => {
               const pct = Math.round((a.score / a.total) * 100);
               return (
@@ -409,7 +409,7 @@ export function StudyTestPage() {
       {/* Questions list */}
       <div className="space-y-3 mb-6">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-white/60">
+          <p className="text-sm font-medium text-foreground/60">
             {questions.length} {questions.length === 1 ? "questão" : "questões"}
           </p>
           <Button size="sm" variant="secondary" onClick={() => { setShowQuestionForm(true); setDraft(emptyDraft()); setEditingQ(null); }}>
@@ -418,8 +418,8 @@ export function StudyTestPage() {
         </div>
 
         {questions.length === 0 && !showQuestionForm && (
-          <div className="text-center py-12 border border-dashed border-white/10 rounded-2xl">
-            <p className="text-white/30 text-sm mb-4">Nenhuma questão ainda. Adicione a primeira!</p>
+          <div className="text-center py-12 border border-dashed border-foreground/10 rounded-2xl">
+            <p className="text-foreground/30 text-sm mb-4">Nenhuma questão ainda. Adicione a primeira!</p>
             <Button size="sm" onClick={() => setShowQuestionForm(true)}>
               <Plus className="w-4 h-4" /> Criar questão
             </Button>
@@ -427,31 +427,31 @@ export function StudyTestPage() {
         )}
 
         {questions.map((q, i) => (
-          <div key={q.id} className="bg-surface-1 border border-white/6 rounded-2xl p-4 group">
+          <div key={q.id} className="bg-surface-1 border border-foreground/6 rounded-2xl p-4 group">
             <div className="flex items-start gap-3">
-              <span className="text-xs font-bold text-white/30 bg-white/5 rounded-lg px-2 py-1 flex-shrink-0 mt-0.5">
+              <span className="text-xs font-bold text-foreground/30 bg-foreground/5 rounded-lg px-2 py-1 flex-shrink-0 mt-0.5">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-white font-medium mb-2">{q.question}</p>
+                <p className="text-sm text-foreground font-medium mb-2">{q.question}</p>
                 <div className="space-y-1">
                   {q.options.map((opt, oi) => (
                     <div key={oi} className={`text-xs px-2.5 py-1 rounded-lg ${
-                      oi === q.correct_index ? "bg-green-500/10 text-green-400" : "text-white/40"
+                      oi === q.correct_index ? "bg-green-500/10 text-green-400" : "text-foreground/40"
                     }`}>
                       {oi === q.correct_index && <span className="font-bold">✓ </span>}{opt}
                     </div>
                   ))}
                 </div>
                 {q.explanation && (
-                  <p className="text-xs text-white/30 italic mt-2">💡 {q.explanation}</p>
+                  <p className="text-xs text-foreground/30 italic mt-2">💡 {q.explanation}</p>
                 )}
               </div>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0">
-                <button onClick={() => startEditQuestion(q)} className="p-1.5 rounded-lg text-white/30 hover:text-studies hover:bg-studies/10 transition-all">
+                <button onClick={() => startEditQuestion(q)} className="p-1.5 rounded-lg text-foreground/30 hover:text-studies hover:bg-studies/10 transition-all">
                   <Pencil className="w-3.5 h-3.5" />
                 </button>
-                <button onClick={() => handleDeleteQuestion(q.id)} className="p-1.5 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                <button onClick={() => handleDeleteQuestion(q.id)} className="p-1.5 rounded-lg text-foreground/30 hover:text-red-400 hover:bg-red-500/10 transition-all">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -468,8 +468,8 @@ export function StudyTestPage() {
             className="bg-surface-1 border border-studies/30 rounded-2xl p-5"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-white text-sm">{editingQ ? "Editar questão" : "Nova questão"}</h3>
-              <button onClick={() => { setShowQuestionForm(false); setDraft(emptyDraft()); setEditingQ(null); }} className="text-white/30 hover:text-white p-1">
+              <h3 className="font-semibold text-foreground text-sm">{editingQ ? "Editar questão" : "Nova questão"}</h3>
+              <button onClick={() => { setShowQuestionForm(false); setDraft(emptyDraft()); setEditingQ(null); }} className="text-foreground/30 hover:text-foreground p-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -477,21 +477,21 @@ export function StudyTestPage() {
             <div className="space-y-4">
               {/* Question text */}
               <div>
-                <label className="text-xs text-white/40 font-medium block mb-1.5">Pergunta *</label>
+                <label className="text-xs text-foreground/40 font-medium block mb-1.5">Pergunta *</label>
                 <textarea
                   autoFocus
                   value={draft.question}
                   onChange={(e) => setDraft((d) => ({ ...d, question: e.target.value }))}
                   placeholder="Ex: O que é closure em JavaScript?"
                   rows={3}
-                  className="w-full bg-surface-3 border border-white/8 rounded-xl px-3 py-2.5 text-sm text-white placeholder-white/25 outline-none focus:border-studies/50 transition-colors resize-none"
+                  className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors resize-none"
                 />
               </div>
 
               {/* Options */}
               <div>
-                <label className="text-xs text-white/40 font-medium block mb-2">
-                  Alternativas * <span className="text-white/20">(marque a correta)</span>
+                <label className="text-xs text-foreground/40 font-medium block mb-2">
+                  Alternativas * <span className="text-foreground/20">(marque a correta)</span>
                 </label>
                 <div className="space-y-2">
                   {draft.options.map((opt, oi) => (
@@ -501,12 +501,12 @@ export function StudyTestPage() {
                         className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                           draft.correct_index === oi
                             ? "border-green-400 bg-green-400/20"
-                            : "border-white/20 hover:border-white/40"
+                            : "border-foreground/20 hover:border-foreground/40"
                         }`}
                       >
                         {draft.correct_index === oi && <div className="w-2.5 h-2.5 rounded-full bg-green-400" />}
                       </button>
-                      <span className="text-xs text-white/30 font-bold w-4">{String.fromCharCode(65 + oi)}</span>
+                      <span className="text-xs text-foreground/30 font-bold w-4">{String.fromCharCode(65 + oi)}</span>
                       <input
                         value={opt}
                         onChange={(e) => setDraft((d) => {
@@ -515,7 +515,7 @@ export function StudyTestPage() {
                           return { ...d, options: opts };
                         })}
                         placeholder={`Alternativa ${String.fromCharCode(65 + oi)}${oi < 2 ? " *" : ""}`}
-                        className="flex-1 bg-surface-3 border border-white/8 rounded-lg px-3 py-2 text-sm text-white placeholder-white/25 outline-none focus:border-studies/40 transition-colors"
+                        className="flex-1 bg-surface-3 border border-foreground/8 rounded-lg px-3 py-2 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/40 transition-colors"
                       />
                     </div>
                   ))}
@@ -524,12 +524,12 @@ export function StudyTestPage() {
 
               {/* Explanation */}
               <div>
-                <label className="text-xs text-white/40 font-medium block mb-1.5">Explicação (opcional)</label>
+                <label className="text-xs text-foreground/40 font-medium block mb-1.5">Explicação (opcional)</label>
                 <input
                   value={draft.explanation}
                   onChange={(e) => setDraft((d) => ({ ...d, explanation: e.target.value }))}
                   placeholder="Explique por que a resposta é correta..."
-                  className="w-full bg-surface-3 border border-white/8 rounded-xl px-3 py-2.5 text-sm text-white placeholder-white/25 outline-none focus:border-studies/50 transition-colors"
+                  className="w-full bg-surface-3 border border-foreground/8 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-foreground/25 outline-none focus:border-studies/50 transition-colors"
                 />
               </div>
             </div>

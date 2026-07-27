@@ -23,11 +23,11 @@ export function Button({
 
   const variants = {
     primary:
-      "bg-habits text-white hover:bg-habits-light active:scale-[0.97] shadow-lg shadow-habits/20",
+      "bg-habits text-foreground hover:bg-habits-light active:scale-[0.97] shadow-lg shadow-habits/20",
     secondary:
-      "bg-surface-2 text-white/80 hover:bg-surface-3 hover:text-white border border-white/6",
+      "bg-surface-2 text-foreground/80 hover:bg-surface-3 hover:text-foreground border border-foreground/6",
     ghost:
-      "text-white/60 hover:text-white hover:bg-white/5",
+      "text-foreground/60 hover:text-foreground hover:bg-foreground/5",
     danger:
       "bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/20",
   };

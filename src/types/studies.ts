@@ -1,5 +1,5 @@
 export type TopicStatus = "pending" | "in_progress" | "done";
-export type ResourceType = "youtube" | "note";
+export type ResourceType = "youtube" | "note" | "code";
 
 export interface StudyProject {
   id: string;

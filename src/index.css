@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── CSS custom properties ─────────────────────────────
+   Values are space-separated R G B for Tailwind opacity
+   modifier compatibility: rgb(var(--color-x) / 0.4)
+   ──────────────────────────────────────────────────── */
+:root {
+  /* Light mode defaults */
+  --color-surface:   244 244 248;
+  --color-surface-1: 255 255 255;
+  --color-surface-2: 240 240 246;
+  --color-surface-3: 232 232 241;
+  --color-foreground: 15 15 26;
+}
+
+.dark {
+  --color-surface:   15 15 19;
+  --color-surface-1: 22 22 29;
+  --color-surface-2: 28 28 38;
+  --color-surface-3: 34 34 48;
+  --color-foreground: 255 255 255;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -13,6 +34,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: rgb(var(--color-surface));
   }
 
   /* Custom scrollbar */
@@ -24,32 +46,40 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(var(--color-foreground) / 0.1);
     border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgb(var(--color-foreground) / 0.2);
   }
 }
 
 @layer utilities {
   /* Glass card effect */
   .glass {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgb(var(--color-foreground) / 0.03);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgb(var(--color-foreground) / 0.06);
   }
 
   /* Skeleton loading animation */
   .skeleton {
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.04) 25%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(255, 255, 255, 0.04) 75%
+      rgb(var(--color-foreground) / 0.04) 25%,
+      rgb(var(--color-foreground) / 0.08) 50%,
+      rgb(var(--color-foreground) / 0.04) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
+  }
+
+  /* Code editor */
+  .code-editor {
+    font-family: "Fira Code", "Cascadia Code", "JetBrains Mono", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    tab-size: 2;
   }
 }
