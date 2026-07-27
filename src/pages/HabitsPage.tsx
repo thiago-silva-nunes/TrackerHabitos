@@ -350,7 +350,7 @@ export function HabitsPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-surface-1 border border-foreground/6 rounded-3xl text-center px-6 py-16"
+          className="bg-surface-1 border border-foreground/10 rounded-3xl text-center px-6 py-16"
         >
           <div className="w-16 h-16 rounded-2xl bg-habits/10 flex items-center justify-center mx-auto mb-4">
             <Flame className="w-8 h-8 text-habits" />
@@ -362,7 +362,7 @@ export function HabitsPage() {
           <Button onClick={openCreateModal}><Plus className="w-4 h-4" /> Criar primeiro hábito</Button>
         </motion.div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {habits.map((habit, index) => {
             const habitCheckins = checkinsByHabit.get(habit.id) ?? new Set<string>();
             const streak = getStreak(habit, habitCheckins, new Date());
@@ -374,62 +374,77 @@ export function HabitsPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.04 }}
-                className="bg-surface-1 border border-foreground/6 rounded-3xl overflow-hidden"
+                className="bg-surface-1 border border-foreground/10 rounded-2xl overflow-hidden flex"
               >
-                <div className="p-5 sm:p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3 min-w-0">
+                {/* Color accent bar */}
+                <div className="w-1 flex-shrink-0 rounded-l-2xl" style={{ backgroundColor: habit.color }} />
+
+                <div className="flex-1 p-4 sm:p-5 min-w-0">
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: `${habit.color}22`, color: habit.color }}
+                        className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: `${habit.color}28`, color: habit.color }}
                       >
-                        <Flame className="w-5 h-5" />
+                        <Flame className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <h2 className="font-semibold text-foreground truncate">{habit.name}</h2>
-                        <p className="text-xs text-foreground/60 mt-1">{frequencyLabel(habit)}</p>
-                        {habit.description && (
-                          <p className="text-sm text-foreground/65 mt-2 line-clamp-2">{habit.description}</p>
-                        )}
+                        <h2 className="font-semibold text-foreground truncate text-sm">{habit.name}</h2>
+                        <p className="text-xs text-foreground/50 mt-0.5">{frequencyLabel(habit)}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 flex-shrink-0">
-                      <button onClick={() => openEditModal(habit)} className="p-2 rounded-xl text-foreground/50 hover:text-foreground hover:bg-foreground/5 transition-colors" aria-label={`Editar ${habit.name}`}>
-                        <Pencil className="w-4 h-4" />
+                    <div className="flex items-center gap-0.5 flex-shrink-0">
+                      {/* Streak / meta badge */}
+                      {habit.frequency_type === "weekly_target" ? (
+                        <span className="text-xs font-medium px-2 py-1 rounded-lg mr-1"
+                          style={{ backgroundColor: `${habit.color}20`, color: habit.color }}>
+                          {weekCheckins}/{weekTarget}×
+                        </span>
+                      ) : streak > 0 ? (
+                        <span className="flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-lg mr-1 text-orange-400 bg-orange-500/10">
+                          <Flame className="w-3 h-3" />{streak}
+                        </span>
+                      ) : null}
+                      <button onClick={() => openEditModal(habit)}
+                        className="p-1.5 rounded-lg text-foreground/40 hover:text-foreground hover:bg-foreground/8 transition-colors"
+                        aria-label={`Editar ${habit.name}`}>
+                        <Pencil className="w-3.5 h-3.5" />
                       </button>
-                      <button onClick={() => handleDeleteHabit(habit)} disabled={deletingId === habit.id} className="p-2 rounded-xl text-foreground/50 hover:text-red-400 hover:bg-red-500/10 transition-colors" aria-label={`Excluir ${habit.name}`}>
-                        <Trash2 className="w-4 h-4" />
+                      <button onClick={() => handleDeleteHabit(habit)} disabled={deletingId === habit.id}
+                        className="p-1.5 rounded-lg text-foreground/40 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        aria-label={`Excluir ${habit.name}`}>
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 mt-5">
-                    {habit.frequency_type === "weekly_target" ? (
-                      <div className="inline-flex items-center gap-1.5 rounded-full bg-studies/10 text-studies px-2.5 py-1 text-xs font-medium">
-                        <Target className="w-3.5 h-3.5" /> Meta desta semana: {weekCheckins}/{weekTarget}
-                      </div>
-                    ) : (
-                      <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-500/10 text-orange-400 px-2.5 py-1 text-xs font-medium">
-                        <Flame className="w-3.5 h-3.5" /> {streak} dias de sequência
-                      </div>
-                    )}
-                    {weekTarget && (
-                      <div className="inline-flex items-center gap-1.5 rounded-full bg-studies/10 text-studies px-2.5 py-1 text-xs font-medium">
-                        <Target className="w-3.5 h-3.5" /> {weekCheckins}/{weekTarget} nesta semana
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-5">
+                  {/* Week tracker */}
+                  <div className="mt-4">
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-foreground/50">Esta semana</p>
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => setActiveDate(addDays(activeDate, -7))} className="p-1 rounded-lg hover:bg-foreground/5 text-foreground/50" aria-label="Semana anterior"><ChevronLeft className="w-4 h-4" /></button>
-                        <button onClick={() => setActiveDate(new Date())} className="text-[11px] text-foreground/60 hover:text-foreground px-1">Hoje</button>
-                        <button onClick={() => setActiveDate(addDays(activeDate, 7))} className="p-1 rounded-lg hover:bg-foreground/5 text-foreground/50" aria-label="Próxima semana"><ChevronRight className="w-4 h-4" /></button>
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-foreground/35">
+                        Semana
+                      </p>
+                      <div className="flex items-center gap-0.5">
+                        <button onClick={() => setActiveDate(addDays(activeDate, -7))}
+                          className="p-0.5 rounded-md hover:bg-foreground/8 text-foreground/40 transition-colors"
+                          aria-label="Semana anterior">
+                          <ChevronLeft className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={() => setActiveDate(new Date())}
+                          className="text-[10px] text-foreground/45 hover:text-foreground px-1.5 transition-colors">
+                          Hoje
+                        </button>
+                        <button onClick={() => setActiveDate(addDays(activeDate, 7))}
+                          className="p-0.5 rounded-md hover:bg-foreground/8 text-foreground/40 transition-colors"
+                          aria-label="Próxima semana">
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     </div>
-                    <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+
+                    {/* Compact day dots */}
+                    <div className="grid grid-cols-7 gap-1">
                       {activeWeekDays.map((day) => {
                         const key = dateKey(day);
                         const completed = habitCheckins.has(key);
@@ -439,27 +454,43 @@ export function HabitsPage() {
                           <button
                             key={key}
                             onClick={() => toggleCheckin(habit, day)}
-                            className={cn(
-                              "min-w-0 rounded-xl border px-1 py-2.5 flex flex-col items-center gap-1 transition-all",
-                              completed ? "text-white border-transparent" : scheduled ? "bg-foreground/[0.03] border-foreground/8 hover:border-habits/40" : "bg-foreground/[0.015] border-transparent opacity-45",
-                              isToday && !completed && "ring-1 ring-habits/60"
-                            )}
-                            style={completed ? { backgroundColor: habit.color, borderColor: habit.color } : undefined}
+                            className="flex flex-col items-center gap-1 group"
                             aria-label={`${completed ? "Desmarcar" : "Marcar"} ${DAY_FORMATTER.format(day)}`}
                           >
-                            <span className="text-[10px] uppercase">{WEEKDAYS.find((item) => item.value === day.getDay())?.short}</span>
-                            <span className="text-sm font-semibold">{day.getDate()}</span>
-                            {completed ? <Check className="w-3.5 h-3.5" /> : <span className="w-3.5 h-3.5" />}
+                            <span className={cn(
+                              "text-[9px] font-medium uppercase transition-colors",
+                              isToday ? "text-foreground/70" : "text-foreground/30"
+                            )}>
+                              {WEEKDAYS.find((w) => w.value === day.getDay())?.short}
+                            </span>
+                            <div
+                              className={cn(
+                                "w-6 h-6 rounded-full border flex items-center justify-center transition-all",
+                                completed
+                                  ? "border-transparent shadow-sm"
+                                  : scheduled
+                                  ? "border-foreground/15 bg-foreground/[0.03] group-hover:border-foreground/30"
+                                  : "border-transparent opacity-20",
+                                isToday && !completed && scheduled && "ring-1 ring-offset-1 ring-offset-surface-1",
+                              )}
+                              style={
+                                completed
+                                  ? { backgroundColor: habit.color }
+                                  : undefined
+                              }
+                            >
+                              {completed && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                            </div>
+                            <span className={cn(
+                              "text-[9px] tabular-nums transition-colors",
+                              isToday ? "font-semibold text-foreground/60" : "text-foreground/25"
+                            )}>
+                              {day.getDate()}
+                            </span>
                           </button>
                         );
                       })}
                     </div>
-                  </div>
-
-                  <div className="mt-5 pt-4 border-t border-foreground/6">
-                    <p className="text-xs text-foreground/55">
-                      {habitCheckins.size} check-ins registrados no histórico carregado
-                    </p>
                   </div>
                 </div>
               </motion.article>
