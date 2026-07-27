@@ -50,8 +50,8 @@ export function Sidebar() {
             </svg>
           </div>
           <div className={cn("overflow-hidden transition-all", collapsed ? "w-0 opacity-0" : "w-auto opacity-100")}>
-            <p className="font-semibold text-sm text-foreground leading-tight">Tracker</p>
-            <p className="text-xs text-foreground/65">Hábitos</p>
+            <p className="font-semibold text-sm text-foreground leading-tight">Minha Vida</p>
+            <p className="text-xs text-foreground/65">Gestão pessoal</p>
           </div>
         </div>
         {!collapsed && (

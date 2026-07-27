@@ -50,8 +50,8 @@ export function SignupPage() {
               <path d="M5 12.5l4.5 4.5 9.5-9.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <h1 className="text-xl font-bold text-foreground">Tracker Hábitos</h1>
-          <p className="text-sm text-foreground/40 mt-1">Seu sistema operacional pessoal</p>
+          <h1 className="text-xl font-bold text-foreground">Minha Vida</h1>
+          <p className="text-sm text-foreground/40 mt-1">Sua gestão pessoal em um lugar só</p>
         </div>
 
         {/* Card */}

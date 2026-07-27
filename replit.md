@@ -1,6 +1,6 @@
-# TrackerHabitos
+# Minha Vida — Gestão Pessoal
 
-**Sistema operacional pessoal de produtividade** — um app web modular para rastrear tarefas, eventos, estudos, treinos e hábitos em um único lugar.
+**Aplicativo de gestão da vida pessoal** — um app web modular para rastrear tarefas, eventos, estudos, treinos e hábitos em um único lugar. Tudo o que precisa ser gerenciado, em um só sistema.
 
 ## Stack
 
@@ -76,6 +76,35 @@ create policy "Users can manage their own modules"
   on public.modules for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+```
+
+### Etapa 2 — Módulo de Tarefas
+
+Execute no SQL Editor do Supabase:
+
+```sql
+create table public.tasks (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  description text,
+  status text not null default 'todo',
+  priority text not null default 'medium',
+  due_date date,
+  due_time time,
+  category text,
+  is_recurring boolean not null default false,
+  recurrence_type text,
+  recurrence_config jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint tasks_status_check check (status in ('todo', 'in_progress', 'done', 'cancelled')),
+  constraint tasks_priority_check check (priority in ('low', 'medium', 'high', 'urgent')),
+  constraint tasks_recurrence_type_check check (recurrence_type in ('daily', 'weekly', 'monthly') or recurrence_type is null)
+);
+alter table public.tasks enable row level security;
+create policy "Users manage own tasks" on public.tasks for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
 ```
 
 ### Etapa 4 — Módulo de Hábitos
