@@ -9,6 +9,7 @@ import { LoginPage } from "@/pages/auth/LoginPage";
 import { SignupPage } from "@/pages/auth/SignupPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { ModulesPage } from "@/pages/ModulesPage";
+import { ProfilePage } from "@/pages/ProfilePage";
 import { ComingSoonPage } from "@/pages/ComingSoonPage";
 import { StudiesPage } from "@/pages/estudos/StudiesPage";
 import { StudyProjectPage } from "@/pages/estudos/StudyProjectPage";
@@ -59,7 +60,9 @@ export default function App() {
 
             {/* ── Protected ── */}
             <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-            <Route path="/modulos" element={<ProtectedRoute><ModulesPage /></ProtectedRoute>} />
+            {/* Legacy path kept for bookmarks; personalization now lives in the profile. */}
+            <Route path="/modulos" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+            <Route path="/perfil" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
             {/* Module routes */}
             <Route path="/tarefas" element={<ProtectedRoute><ComingSoonPage moduleName="Módulo Tarefas" /></ProtectedRoute>} />

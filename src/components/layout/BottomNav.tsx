@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, CheckSquare, Calendar, BookOpen, Dumbbell, Flame, Moon, Sun } from "lucide-react";
+import { LayoutDashboard, CheckSquare, Calendar, BookOpen, Dumbbell, Flame, Moon, Sun, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useModules } from "@/contexts/ModuleContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -15,7 +15,7 @@ const COLOR_ACTIVE: Record<ModuleKey, string> = {
 export function BottomNav() {
   const { activeModules } = useModules();
   const { theme, toggleTheme } = useTheme();
-  const visibleModules = activeModules.slice(0, 3);
+  const visibleModules = activeModules.slice(0, 2);
 
   return (
     <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-surface-1/95 backdrop-blur-xl border-t border-foreground/6 safe-area-inset-bottom z-40">
@@ -49,6 +49,18 @@ export function BottomNav() {
             </NavLink>
           );
         })}
+
+        <NavLink
+          to="/perfil"
+          className={({ isActive }) =>
+            cn("flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all",
+              isActive ? "text-foreground" : "text-foreground/60"
+            )
+          }
+        >
+          <UserRound className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Perfil</span>
+        </NavLink>
 
         {/* Theme toggle */}
         <button

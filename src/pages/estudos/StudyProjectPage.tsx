@@ -204,7 +204,7 @@ export function StudyProjectPage() {
 
       {/* ── Trilhas Tab ── */}
       {tab === "trilhas" && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {tracks.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-foreground/65 text-sm mb-4">Nenhuma trilha ainda. Crie a primeira!</p>
@@ -218,7 +218,7 @@ export function StudyProjectPage() {
                 const doneCount = track.topics.filter((t) => t.status === "done").length;
                 const isExpanded = expandedTracks.has(track.id);
                 return (
-                  <div key={track.id} className="bg-surface-1 border border-foreground/6 rounded-2xl overflow-hidden">
+                  <div key={track.id} className="bg-surface-1 border border-foreground/6 rounded-3xl overflow-hidden shadow-sm shadow-black/5">
                     <div
                       role="button"
                       tabIndex={0}
@@ -232,12 +232,16 @@ export function StudyProjectPage() {
                       }}
                       className="w-full flex items-center justify-between p-4 hover:bg-foreground/[0.02] transition-colors group cursor-pointer"
                     >
-                      <div className="flex items-center gap-3">
-                        <GripVertical className="w-4 h-4 text-foreground/55" />
-                        <span className="font-semibold text-foreground text-sm">{track.title}</span>
-                        <span className="text-xs text-foreground/70 bg-foreground/5 rounded-full px-2 py-0.5">
-                          {doneCount}/{track.topics.length}
-                        </span>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-studies/10 flex items-center justify-center flex-shrink-0">
+                          <GripVertical className="w-4 h-4 text-studies/70" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="font-semibold text-foreground text-sm block truncate">{track.title}</span>
+                          <span className="text-xs text-foreground/55">
+                            {track.topics.length === 1 ? "1 tarefa" : `${track.topics.length} tarefas`}
+                          </span>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <button onClick={(e) => { e.stopPropagation(); handleDeleteTrack(track.id); }}
@@ -248,11 +252,25 @@ export function StudyProjectPage() {
                       </div>
                     </div>
 
-                    <AnimatePresence>
+                     <div className="px-4 pb-3">
+                       <div className="h-1.5 rounded-full bg-foreground/6 overflow-hidden">
+                         <div
+                           className="h-full rounded-full bg-studies transition-all duration-500"
+                           style={{ width: `${track.topics.length ? (doneCount / track.topics.length) * 100 : 0}%` }}
+                         />
+                       </div>
+                     </div>
+
+                     <AnimatePresence>
                       {isExpanded && (
                         <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
                           <div className="border-t border-foreground/6">
-                            {track.topics.map((topic) => {
+                             {track.topics.length > 0 && (
+                               <div className="px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-foreground/45">
+                                 Tópicos da trilha
+                               </div>
+                             )}
+                             {track.topics.map((topic) => {
                               const s = STATUS_CONFIG[topic.status];
                               const StatusIcon = s.icon;
                               return (
@@ -310,7 +328,7 @@ export function StudyProjectPage() {
                 );
               })}
 
-              <Button variant="secondary" onClick={() => setShowTrackModal(true)} className="w-full">
+               <Button variant="secondary" onClick={() => setShowTrackModal(true)} className="w-full lg:col-span-2">
                 <Plus className="w-4 h-4" /> Nova trilha
               </Button>
             </>

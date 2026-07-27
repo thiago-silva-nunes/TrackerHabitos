@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import { Moon, Sun, LayoutDashboard, CheckSquare, Calendar, BookOpen, Dumbbell, Flame, Settings, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Moon, Sun, LayoutDashboard, CheckSquare, Calendar, BookOpen, Dumbbell, Flame, Settings, LogOut, PanelLeftClose, PanelLeftOpen, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModules } from "@/contexts/ModuleContext";
@@ -124,17 +124,17 @@ export function Sidebar() {
           {!collapsed && "Recolher menu"}
         </button>
         <NavLink
-          to="/modulos"
+          to="/perfil"
           className={({ isActive }) =>
             cn("flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border border-transparent",
               collapsed && "justify-center px-0",
               isActive ? "text-foreground bg-foreground/8" : "text-foreground/65 hover:text-foreground hover:bg-foreground/4"
             )
           }
-          title={collapsed ? "Meus Módulos" : undefined}
+          title={collapsed ? "Perfil e módulos" : undefined}
         >
-          <Settings className="w-4 h-4 flex-shrink-0" />
-          {!collapsed && "Meus Módulos"}
+          <UserRound className="w-4 h-4 flex-shrink-0" />
+          {!collapsed && "Perfil e módulos"}
         </NavLink>
 
         <button
@@ -149,12 +149,12 @@ export function Sidebar() {
           {!collapsed && "Sair"}
         </button>
 
-        <div className={cn("flex items-center gap-3 px-3 py-3 mt-2 rounded-xl bg-foreground/3", collapsed && "justify-center px-0")} title={collapsed ? user?.email ?? "Usuário" : undefined}>
+        <NavLink to="/perfil" className={cn("flex items-center gap-3 px-3 py-3 mt-2 rounded-xl bg-foreground/3 hover:bg-foreground/6 transition-colors", collapsed && "justify-center px-0")} title={collapsed ? user?.email ?? "Usuário" : undefined}>
           <div className="w-8 h-8 rounded-full bg-habits/30 flex items-center justify-center text-habits text-sm font-semibold flex-shrink-0">
-            {user?.email?.charAt(0).toUpperCase() ?? "U"}
+            {((user?.user_metadata?.full_name as string | undefined) || user?.email || "U").charAt(0).toUpperCase()}
           </div>
-          {!collapsed && <p className="text-xs text-foreground/65 truncate">{user?.email}</p>}
-        </div>
+          {!collapsed && <p className="text-xs text-foreground/65 truncate">{(user?.user_metadata?.full_name as string | undefined) || user?.email}</p>}
+        </NavLink>
       </div>
     </aside>
   );
