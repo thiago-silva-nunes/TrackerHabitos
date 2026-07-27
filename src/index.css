@@ -75,11 +75,107 @@
     animation: shimmer 1.5s infinite;
   }
 
-  /* Code editor */
-  .code-editor {
-    font-family: "Fira Code", "Cascadia Code", "JetBrains Mono", "Courier New", monospace;
-    font-size: 13px;
-    line-height: 1.7;
-    tab-size: 2;
+  /* ── Code Editor component ────────────────────────────── */
+
+  /* Theme palettes */
+  .ce-dark  { --ce-bg: #0d0d14; --ce-text: #e8e8f0; --ce-ln: #3a3a50; }
+  .ce-light { --ce-bg: #f2f2f8; --ce-text: #1e1e2e; --ce-ln: #b0b0c8; }
+
+  /* Syntax token colours — dark */
+  .ce-dark .ce-kw  { color: #c084fc; font-weight: 600; }
+  .ce-dark .ce-str { color: #86efac; }
+  .ce-dark .ce-cmt { color: #6b7280; font-style: italic; }
+  .ce-dark .ce-num { color: #fb923c; }
+  .ce-dark .ce-fn  { color: #60a5fa; }
+  .ce-dark .ce-tag { color: #f87171; font-weight: 600; }
+  .ce-dark .ce-attr{ color: #fbbf24; }
+  .ce-dark .ce-op  { color: #67e8f9; }
+  .ce-dark .ce-bi  { color: #f9a8d4; }
+  .ce-dark .ce-pu  { color: #94a3b8; }
+
+  /* Syntax token colours — light */
+  .ce-light .ce-kw  { color: #7c3aed; font-weight: 600; }
+  .ce-light .ce-str { color: #16a34a; }
+  .ce-light .ce-cmt { color: #9ca3af; font-style: italic; }
+  .ce-light .ce-num { color: #c2410c; }
+  .ce-light .ce-fn  { color: #1d4ed8; }
+  .ce-light .ce-tag { color: #b91c1c; font-weight: 600; }
+  .ce-light .ce-attr{ color: #92400e; }
+  .ce-light .ce-op  { color: #0e7490; }
+  .ce-light .ce-bi  { color: #9d174d; }
+  .ce-light .ce-pu  { color: #6b7280; }
+
+  /* ── Full-height layout (terminal panels) */
+  .ce-wrap {
+    display: flex;
+    background: var(--ce-bg);
+    overflow: hidden;
+    height: 100%;
   }
+
+  /* ── Auto-height layout (card code blocks) */
+  .ce-auto {
+    display: flex;
+    background: var(--ce-bg);
+    overflow: hidden;
+    /* height is set inline by the component */
+  }
+
+  /* Line numbers column */
+  .ce-ln {
+    flex-shrink: 0;
+    width: 42px;
+    padding: 12px 8px 12px 0;
+    text-align: right;
+    color: var(--ce-ln);
+    background: var(--ce-bg);
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Editor area — fills remaining space */
+  .ce-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Highlighted backdrop (pre) */
+  .ce-backdrop {
+    position: absolute;
+    inset: 0;
+    color: var(--ce-text);
+    background: var(--ce-bg);
+    overflow: auto;
+    scrollbar-width: none;
+    word-break: keep-all;
+    word-wrap: normal;
+    border: none;
+    outline: none;
+    pointer-events: none;
+  }
+  .ce-backdrop::-webkit-scrollbar { display: none; }
+
+  /* Transparent textarea on top captures input */
+  .ce-ta {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: transparent;
+    resize: none;
+    outline: none;
+    border: none;
+    overflow: auto;
+    word-break: keep-all;
+    word-wrap: normal;
+  }
+  .ce-ta::selection        { background: rgba(139,92,246,0.25); }
+  .ce-light .ce-ta::selection { background: rgba(124,58,237,0.18); }
+
+  /* Console/output panel bg helper */
+  .ce-console-dark  { background: #0a0a12; }
+  .ce-console-light { background: #e8e8f0; }
 }

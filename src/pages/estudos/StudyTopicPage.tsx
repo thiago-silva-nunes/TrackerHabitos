@@ -9,7 +9,9 @@ import {
 import toast from "react-hot-toast";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/Button";
+import { CodeEditor } from "@/components/ui/CodeEditor";
 import { StudyTopic, TopicResource, TopicStatus } from "@/types/studies";
 
 const STATUS_OPTIONS: { value: TopicStatus; label: string; icon: React.ElementType; color: string }[] = [
@@ -77,6 +79,8 @@ type AddMode = "youtube" | "note" | "code" | null;
 export function StudyTopicPage() {
   const { projectId, topicId } = useParams<{ projectId: string; topicId: string }>();
   const { user } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const navigate = useNavigate();
 
   const [topic, setTopic] = useState<StudyTopic | null>(null);
@@ -424,7 +428,7 @@ export function StudyTopicPage() {
               {/* ── Code block ── */}
               {resource.type === "code" && (
                 <div>
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-foreground/6 bg-[#0d0d14]">
+                  <div className={`flex items-center justify-between px-4 py-2.5 border-b border-foreground/6 ${isDark ? "bg-[#0d0d14]" : "bg-[#e8e8f4]"}`}>
                     <div className="flex items-center gap-2">
                       <Code className="w-3.5 h-3.5 text-studies" />
                       <span className="text-xs text-studies font-medium">{resource.title}</span>
@@ -455,30 +459,37 @@ export function StudyTopicPage() {
                   </div>
 
                   {editingResource?.id === resource.id ? (
-                    <div className="bg-[#0d0d14] p-4">
-                      <textarea autoFocus value={editContent}
-                        onChange={(e) => setEditContent(e.target.value)}
+                    <div>
+                      <CodeEditor
+                        autoFocus
+                        value={editContent}
+                        onChange={setEditContent}
+                        language={resource.url ?? "javascript"}
                         onKeyDown={(e) => handleTabKey(e, setEditContent)}
-                        rows={10}
-                        className="w-full bg-transparent text-[#e8e8f0] outline-none resize-none code-editor leading-relaxed mb-3"
-                        style={{ fontFamily: "'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace", fontSize: 13 }}
+                        autoHeight
+                        minLines={10}
+                        maxLines={30}
                       />
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 p-3 border-t border-foreground/6">
                         <Button variant="secondary" size="sm" onClick={() => setEditingResource(null)}>Cancelar</Button>
                         <Button size="sm" onClick={handleSaveEdit} loading={savingEdit}><Save className="w-3.5 h-3.5" /> Salvar</Button>
                       </div>
                     </div>
                   ) : (
-                    <pre className="bg-[#0d0d14] text-[#e8e8f0] p-4 overflow-x-auto text-sm leading-relaxed cursor-text"
+                    <CodeEditor
+                      value={resource.content ?? ""}
+                      language={resource.url ?? "javascript"}
+                      readOnly
+                      autoHeight
+                      minLines={3}
+                      maxLines={30}
                       onClick={() => { setEditingResource(resource); setEditContent(resource.content ?? ""); }}
-                      style={{ fontFamily: "'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace", fontSize: 13 }}>
-                      {resource.content}
-                    </pre>
+                    />
                   )}
 
                   {/* Code output */}
                   {codeOutput[resource.id] && (
-                    <div className="bg-[#111118] border-t border-foreground/10 px-4 py-3">
+                    <div className={`border-t border-foreground/10 px-4 py-3 ${isDark ? "bg-[#111118]" : "bg-[#e0e0ec]"}`}>
                       <div className="flex items-center gap-2 mb-2">
                         <Terminal className="w-3.5 h-3.5 text-green-400" />
                         <span className="text-xs text-green-400 font-medium">Saída</span>
@@ -583,7 +594,7 @@ export function StudyTopicPage() {
           <motion.div key="code" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
             className="bg-surface-1 border border-foreground/8 rounded-2xl overflow-hidden">
             {/* Code form header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-[#0d0d14] border-b border-foreground/8">
+            <div className={`flex items-center justify-between px-4 py-3 border-b border-foreground/8 ${isDark ? "bg-[#0d0d14]" : "bg-[#e8e8f4]"}`}>
               <div className="flex items-center gap-3">
                 <Code className="w-4 h-4 text-green-400" />
                 <input value={codeTitle} onChange={(e) => setCodeTitle(e.target.value)} placeholder="Título do bloco..."
@@ -597,18 +608,17 @@ export function StudyTopicPage() {
             </div>
 
             {/* Editor */}
-            <div className="flex bg-[#0d0d14]">
-              <div className="flex-shrink-0 w-10 text-foreground/20 text-right pr-2 py-3 select-none font-mono text-xs leading-[1.7]">
-                {(codeContent || " ").split("\n").map((_, i) => <div key={i}>{i + 1}</div>)}
-              </div>
-              <textarea autoFocus value={codeContent} onChange={(e) => setCodeContent(e.target.value)}
-                onKeyDown={(e) => handleTabKey(e, setCodeContent)}
-                rows={10} spellCheck={false}
-                placeholder={`// Escreva seu ${LANGUAGES.find(l => l.id === codeLang)?.label ?? "código"} aqui...`}
-                className="flex-1 bg-transparent text-[#e8e8f0] py-3 pr-4 pl-2 outline-none resize-none leading-[1.7] placeholder-foreground/20"
-                style={{ fontFamily: "'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace", fontSize: 13 }}
-              />
-            </div>
+            <CodeEditor
+              autoFocus
+              value={codeContent}
+              onChange={setCodeContent}
+              language={codeLang}
+              onKeyDown={(e) => handleTabKey(e, setCodeContent)}
+              placeholder={`// Escreva seu ${LANGUAGES.find(l => l.id === codeLang)?.label ?? "código"} aqui...`}
+              autoHeight
+              minLines={10}
+              maxLines={30}
+            />
 
             {/* Comment/notes below code */}
             <div className="p-4 border-t border-foreground/6">

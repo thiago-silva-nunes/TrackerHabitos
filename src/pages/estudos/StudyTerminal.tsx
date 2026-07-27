@@ -6,6 +6,8 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { CodeEditor } from "@/components/ui/CodeEditor";
+import { useTheme } from "@/contexts/ThemeContext";
 
 /* ── Types ───────────────────────────────────────── */
 interface TerminalFile {
@@ -221,6 +223,8 @@ export function StudyTerminal({ studyProjectId }: { studyProjectId: string }) {
   const [newFileName, setNewFileName] = useState("");
   const [running, setRunning] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   // Init
   useEffect(() => {
@@ -461,29 +465,19 @@ export function StudyTerminal({ studyProjectId }: { studyProjectId: string }) {
         </div>
 
         {/* Code editor */}
-        <div className="flex-1 relative overflow-hidden bg-[#0d0d14]">
+        <div className="flex-1 overflow-hidden">
           {activeFile ? (
-            <div className="h-full flex">
-              {/* Line numbers */}
-              <div className="flex-shrink-0 w-10 bg-[#0d0d14] text-foreground/20 text-right pr-2 py-3 select-none overflow-hidden pointer-events-none font-mono text-xs leading-[1.7]">
-                {activeFile.content.split("\n").map((_, i) => (
-                  <div key={i}>{i + 1}</div>
-                ))}
-              </div>
-              <textarea
-                ref={editorRef}
-                value={activeFile.content}
-                onChange={(e) => handleCodeChange(e.target.value)}
-                onKeyDown={handleEditorKeyDown}
-                spellCheck={false}
-                autoCorrect="off"
-                autoCapitalize="off"
-                className="flex-1 bg-transparent text-[#e8e8f0] py-3 pr-4 pl-2 outline-none resize-none code-editor leading-[1.7] text-sm"
-                style={{ fontFamily: "'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace" }}
-              />
-            </div>
+            <CodeEditor
+              value={activeFile.content}
+              onChange={handleCodeChange}
+              language={activeFile.language}
+              onKeyDown={handleEditorKeyDown}
+              textareaRef={editorRef}
+              showLineNumbers
+              className="h-full"
+            />
           ) : (
-            <div className="flex items-center justify-center h-full text-foreground/20 text-sm">
+            <div className={`flex items-center justify-center h-full text-sm ${isDark ? "bg-[#0d0d14] text-white/20" : "bg-[#f2f2f8] text-black/20"}`}>
               Selecione ou crie um arquivo
             </div>
           )}
@@ -491,9 +485,9 @@ export function StudyTerminal({ studyProjectId }: { studyProjectId: string }) {
       </div>
 
       {/* ── Right: Output ── */}
-      <div className="w-72 xl:w-96 flex-shrink-0 border-l border-foreground/6 flex flex-col bg-[#0d0d14]">
+      <div className={`w-72 xl:w-96 flex-shrink-0 border-l border-foreground/6 flex flex-col ${isDark ? "bg-[#0d0d14]" : "bg-[#f2f2f8]"}`}>
         {/* Output tabs */}
-        <div className="flex items-center gap-1 px-3 py-2 border-b border-foreground/10 bg-[#111118]">
+        <div className={`flex items-center gap-1 px-3 py-2 border-b border-foreground/10 ${isDark ? "bg-[#111118]" : "bg-[#e8e8f0]"}`}>
           <button
             onClick={() => setOutputTab("console")}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${outputTab === "console" ? "bg-foreground/10 text-foreground" : "text-foreground/40 hover:text-foreground/70"}`}
@@ -521,7 +515,7 @@ export function StudyTerminal({ studyProjectId }: { studyProjectId: string }) {
                   entry.type === "error" ? "text-red-400" :
                   entry.type === "warn" ? "text-yellow-400" :
                   entry.type === "system" ? "text-studies/70" :
-                  "text-[#c8c8d8]"
+                  isDark ? "text-[#c8c8d8]" : "text-foreground/70"
                 }`}>
                   <span className="text-foreground/20 select-none flex-shrink-0">
                     {entry.type === "error" ? "✖" : entry.type === "warn" ? "⚠" : entry.type === "system" ? "▶" : ">"}
