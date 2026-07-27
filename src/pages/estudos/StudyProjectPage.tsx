@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Plus, X, ChevronDown, ChevronRight,
   CheckCircle2, Circle, Clock, BookOpen, Terminal,
-  Trash2, GripVertical, Pencil,
+  Trash2, GripVertical, Pencil, Link2,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { supabase } from "@/lib/supabase";
@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { StudyProject, StudyTrackWithTopics, StudyTopic, TopicStatus } from "@/types/studies";
 import { StudyTerminal } from "./StudyTerminal";
+import { StudyLinksPanel } from "./StudyLinksPanel";
 
 const STATUS_CONFIG: Record<TopicStatus, { icon: React.ElementType; label: string; color: string }> = {
   pending:     { icon: Circle,       label: "Pendente",     color: "text-foreground/60" },
@@ -19,7 +20,7 @@ const STATUS_CONFIG: Record<TopicStatus, { icon: React.ElementType; label: strin
   done:        { icon: CheckCircle2, label: "Concluído",    color: "text-green-400"     },
 };
 
-type Tab = "trilhas" | "terminal";
+type Tab = "trilhas" | "terminal" | "links";
 
 export function StudyProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -190,6 +191,7 @@ export function StudyProjectPage() {
         {([
           ["trilhas",  "Trilhas de Aprendizagem", BookOpen],
           ["terminal", "Terminal / Playground",   Terminal],
+          ["links",    "Links e Ferramentas",     Link2],
         ] as const).map(([key, label, Icon]) => (
           <button key={key} onClick={() => setTab(key)}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
@@ -217,8 +219,19 @@ export function StudyProjectPage() {
                 const isExpanded = expandedTracks.has(track.id);
                 return (
                   <div key={track.id} className="bg-surface-1 border border-foreground/6 rounded-2xl overflow-hidden">
-                    <button onClick={() => toggleTrack(track.id)}
-                      className="w-full flex items-center justify-between p-4 hover:bg-foreground/[0.02] transition-colors group">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleTrack(track.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          toggleTrack(track.id);
+                        }
+                      }}
+                      className="w-full flex items-center justify-between p-4 hover:bg-foreground/[0.02] transition-colors group cursor-pointer"
+                    >
                       <div className="flex items-center gap-3">
                         <GripVertical className="w-4 h-4 text-foreground/55" />
                         <span className="font-semibold text-foreground text-sm">{track.title}</span>
@@ -233,7 +246,7 @@ export function StudyProjectPage() {
                         </button>
                         {isExpanded ? <ChevronDown className="w-4 h-4 text-foreground/40" /> : <ChevronRight className="w-4 h-4 text-foreground/40" />}
                       </div>
-                    </button>
+                    </div>
 
                     <AnimatePresence>
                       {isExpanded && (
@@ -314,6 +327,11 @@ export function StudyProjectPage() {
           </p>
           <StudyTerminal studyProjectId={projectId} />
         </motion.div>
+      )}
+
+      {/* ── Links e ferramentas Tab ── */}
+      {tab === "links" && projectId && (
+        <StudyLinksPanel projectId={projectId} />
       )}
 
       {/* Create Track Modal */}

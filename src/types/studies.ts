@@ -15,6 +15,17 @@ export interface StudyProjectWithStats extends StudyProject {
   done_topics: number;
 }
 
+export type StudyLinkKind = "link" | "tool";
+
+export interface StudyLinkItem {
+  id: string;
+  kind: StudyLinkKind;
+  name: string;
+  url: string | null;
+  note: string | null;
+  created_at: string;
+}
+
 export interface StudyTrack {
   id: string;
   project_id: string;
