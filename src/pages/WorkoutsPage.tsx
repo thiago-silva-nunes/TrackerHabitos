@@ -280,6 +280,13 @@ export function WorkoutsPage() {
     }
   }
 
+  /* ── derived ── (must stay before any early return) */
+  const planSessionCounts = useMemo(() => {
+    const map: Record<string, number> = {};
+    sessions.forEach((s) => { map[s.plan_id] = (map[s.plan_id] ?? 0) + 1; });
+    return map;
+  }, [sessions]);
+
   /* ── loading ── */
   if (loading) {
     return (
@@ -289,12 +296,6 @@ export function WorkoutsPage() {
       </div>
     );
   }
-
-  const planSessionCounts = useMemo(() => {
-    const map: Record<string, number> = {};
-    sessions.forEach((s) => { map[s.plan_id] = (map[s.plan_id] ?? 0) + 1; });
-    return map;
-  }, [sessions]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
